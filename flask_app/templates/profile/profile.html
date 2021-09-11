@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <!-- Профиль пользователя -->
+        <div class="col">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ user.username }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary"><a
+                                href="{{ url_for('profile.change_master_password') }}"
+                                style="text-decoration: none; color:white">Сменить пароль</a></button>
+                    </p>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary"><a href="{{ url_for('profile.change_email') }}"
+                                style="text-decoration: none; color:white">Сменить почту</a></button>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <!-- Аккаунты пользователя -->
+        <div class="col">
+            <h4>Ваши аккаунты</h4>
+            {% for upass in user.passwords %}
+            <div class="btn-group">
+                <button type="button" class="btn btn-info dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    {{ upass.password_name }}
+                </button>
+                <ul class="dropdown-menu">
+                    <!-- <li>Пароль - {{ upass.password_content }}</li> -->
+                    <li>Добавлен - {{ upass.date_added|date }}</li>
+                </ul>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
