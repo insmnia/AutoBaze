@@ -16,7 +16,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(256), nullable=False)
-    passwords = db.relationship("Password", backref="author", lazy=True)
+    orders = db.relationship("Order", backref="author", lazy=True)
 
     def __repr__(self):
         return f"{self.id} {self.username} {self.email} {self.password}"
@@ -45,16 +45,22 @@ class User(db.Model, UserMixin):
         return User.query.get(id)
 
 
-class Password(db.Model):
+class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    password_name = db.Column(db.String(120), nullable=False, unique=True)
-    date_added = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow)
-    password_content = db.Column(db.String(120), nullable=False)
+    FCs = db.Column(db.String(40), nullable=False)
+    phone = db.Column(db.String(10), nullable=False)
+    email = db.Column(db.String(30), nullable=False)
+    departure_point = db.Column(db.String(40), nullable=False)
+    arrival_point = db.Column(db.String(40), nullable=False)
+    order_type = db.Column(db.String(15), nullable=False)
+    # stops
+    # day
+    amount = db.Column(db.Integer)
+    state = db.Column(db.String(10), nullable=False)
     creator = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
-    def __repr__(self):
-        return f"{self.id} {self.password_name} {self.date_added} {self.password_content}"
+    def change_state(self, new_state):
+        self.state = new_state
 
-    def change_password(self, new_password):
-        self.password_content = new_password
+    def __repr__(self):
+        return ""

@@ -1,7 +1,56 @@
 {% extends "base.html" %}
 {% block content %}
+
 <div class="container">
     <div class="row">
+        <div class="col-md-offset-3 col-md-6">
+            <form class="form-horizontal" method="POST" action="">
+                <span class="heading">Оставить заявку</span>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="ФИО" name="FCS">
+                </div>
+                <div class="form-group help">
+                    <input type="text" class="form-control" placeholder="Номер телефона" name="phone">
+                </div>
+                <div class="form-group help">
+                    <input type="text" class="form-control" placeholder="E-mail адрес" name="email">
+                </div>
+                <div class="form-group help">
+                    <input type="text" class="form-control" placeholder="Откуда" name="from">
+                </div>
+                <div class="form-group help">
+                    <input type="text" class="form-control" placeholder="Куда" name="to">
+                </div>
+                <div class="form-group help">
+                    <input type="date" name="calendar" value="{{ today }}" min="{{ today }}" max="{{ max_day }}"
+                        class="form-control" placeholder="Пароль" name="date">
+                </div>
+                <div class="form-group help">
+                    <select name="ta" id="ta" class="selectpicker form-control">
+                        <option value="1">Пасажирская</option>
+                        <option value="2">Грузоперевозка</option>
+                    </select>
+                </div>
+                <div class="form-group help">
+                    <input type="text" class="form-control" name="amount" placeholder="Количество пассажиров">
+                </div>
+                <div class="form-group help">
+                    <button type="submit" class="btn btn-default">Отправить</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
+<script>
+    let trnsp = document.getElementById('ta');
+    console.log(trnsp)
+    trnsp.addEventListener('change', function () {
+        if (trnsp.value === "1") {
+            document.getElementsByName("amount")[0].placeholder = "Количество пассажиров";
+        }
+        else if (trnsp.value === "2") {
+            document.getElementsByName("amount")[0].placeholder = "Вес груза";
+        }
+    });
+</script>
 {% endblock %}
