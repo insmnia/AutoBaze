@@ -17,9 +17,10 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(256), nullable=False)
     orders = db.relationship("Order", backref="author", lazy=True)
+    manager = db.Column(db.Integer)
 
     def __repr__(self):
-        return f"{self.id} {self.username} {self.email} {self.password}"
+        return f"{self.username} {self.manager}"
 
     def change_email(self, new_email):
         self.email = new_email
@@ -53,8 +54,7 @@ class Order(db.Model):
     departure_point = db.Column(db.String(40), nullable=False)
     arrival_point = db.Column(db.String(40), nullable=False)
     order_type = db.Column(db.String(15), nullable=False)
-    # stops
-    # day
+    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     amount = db.Column(db.Integer)
     state = db.Column(db.String(10), nullable=False)
     creator = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)

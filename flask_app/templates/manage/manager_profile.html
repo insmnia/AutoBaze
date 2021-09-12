@@ -2,11 +2,12 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <!-- Профиль пользователя -->
+        <!-- Профиль менеджера -->
         <div class="col">
             <div class="card" style="width: 18rem;">
                 <div class="card-body">
                     <h5 class="card-title">{{ user.username }}</h5>
+                    <h5 class="card-title">{{ "Менеджер" }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
                     <p class="card-text">
                         <button type="button" class="btn btn-primary"><a
@@ -17,14 +18,18 @@
                         <button type="button" class="btn btn-primary"><a href="{{ url_for('profile.change_email') }}"
                                 style="text-decoration: none; color:white">Сменить почту</a></button>
                     </p>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary"><a href="{{ url_for('manage.add_manager') }}"
+                                style="text-decoration: none; color:white">Добавить менеджера</a></button>
+                    </p>
                 </div>
             </div>
         </div>
         <!-- Заявки пользователя -->
         <div class="col">
             <div class="row">
-                {% for order in user.orders %}
-                <div class="card" style="width: 18rem;">
+                {% for order in orders %}
+                <div class="card" style="width: 18rem; color:white;background-color: black;">
                     <div class="card-body">
                         <h5 class="card-title">{{ order.date|date }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ order.FCs }}</h6>
@@ -38,9 +43,23 @@
                             {% else %}
                             Вес груза: {{ order.amount}}<br>
                             {% endif %}
+                        </p>
+                        {% if order.state == "Одобрено" %}
+                        <p style="color:green;">
                             Статус: {{ order.state }}
                         </p>
-                        <a href="{{ url_for('profile.delete_order',id=order.id) }}" class="card-link">Удалить</a>
+                        {% elif order.state == "В обработке" %}
+                        <p style="color:yellow;">
+                            Статус: {{ order.state }}
+                        </p>
+                        {% else %}
+                        <p style="color:red;">
+                            Статус: {{ order.state }}
+                        </p>
+                        {% endif %}
+                        <a href="{{ url_for('manage.accept_order',id=order.id) }}" class="card-link">Принять</a>
+                        <a href="{{ url_for('manage.decline_order',id=order.id) }}" class="card-link">Отклонить</a>
+                        <a href="{{ url_for('manage.delete_order',id=order.id) }}" class="card-link">Удалить</a>
                     </div>
                 </div>
                 {% endfor %}

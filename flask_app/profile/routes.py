@@ -1,13 +1,13 @@
 from flask import render_template, request, Blueprint, flash, redirect, url_for
-from flask_app.profile.forms import ChangeMasterPasswordForm, ChangeEmailForm
-from flask_app.models import User
+from flask_app.profile.forms import ChangePasswordForm, ChangeEmailForm
+from flask_app.models import User, Order
 from flask_login import login_required, current_user
 from flask_app import bcrypt, db
 
 prof = Blueprint('profile', __name__)
 
 
-@prof.route('/profile')
+@prof.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     return render_template('profile/profile.html', user=current_user, title="Профиль")
@@ -16,7 +16,7 @@ def profile():
 @prof.route('/change_master_password', methods=['GET', 'POST'])
 @login_required
 def change_master_password():
-    form = ChangeMasterPasswordForm()
+    form = ChangePasswordForm()
     if form.validate_on_submit():
         user = User.query.filter_by(username=current_user.username).first()
         if bcrypt.check_password_hash(user.password, form.current_password.data) and form.current_password.data != form.new_password.data:
@@ -24,7 +24,7 @@ def change_master_password():
                 form.new_password.data).decode('utf-8')
             db.session.commit()
             flash('Пароль успешно сменен!', "success")
-            return redirect(url_for('main.index'))
+            return redirect(url_for('profile.profile'))
         else:
             flash('Мастер-пароль введен неверно и/или пароли совпадают')
             return redirect(url_for('profile.change_master_password'))
@@ -39,5 +39,15 @@ def change_email():
         current_user.change_email(form.new_email.data)
         db.session.commit()
         flash("Почта успешно сменена!")
-        return redirect(url_for('main.profile'))
+        return redirect(url_for('profile.profile'))
     return render_template('profile/change_email.html', form=form, title="Смена почты")
+
+
+@prof.route("/order/<int:id>/delete")
+@login_required
+def delete_order(id):
+    order = Order.query.filter_by(id=int(id)).first()
+    db.session.delete(order)
+    db.session.commit()
+    flash("Заявка успешно удалена!")
+    return redirect(url_for('profile.profile'))

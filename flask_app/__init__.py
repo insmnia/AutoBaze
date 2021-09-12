@@ -5,6 +5,9 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
 from flask_app.config import Config
+# app = Flask(__name__)
+# app.config.from_object(Config)
+# db = SQLAlchemy(app)
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 mail = Mail()
@@ -26,9 +29,11 @@ def create_app():
     from flask_app.auth.routes import auth
     from flask_app.main.routes import main
     from flask_app.profile.routes import prof
+    from flask_app.manage.routes import manage
     app.register_blueprint(auth, prefix="/auth")
     app.register_blueprint(main)
-    app.register_blueprint(prof)
+    app.register_blueprint(manage, prefix="/manage")
+    app.register_blueprint(prof, prefix="/user")
 
     @app.template_filter('date')
     def datetimeformat(value):  # 2021-09-05 00:15:40.738222

@@ -21,6 +21,11 @@
 </head>
 
 <body>
+    <style>
+        body {
+            background-color: antiquewhite;
+        }
+    </style>
     <!-- Навигация -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -36,7 +41,11 @@
                         href="https://docs.google.com/presentation/d/1NLE0ki3XzEj3-x1TpYYwyrycPuab7_tD/edit#slide=id.p1">О
                         проекте</a>
                     {% if current_user.is_authenticated %}
+                    {% if current_user.manager == 1 %}
+                    <a class="nav-link" href="{{ url_for('manage.profile') }}">Кабинет</a>
+                    {% else %}
                     <a class="nav-link" href="{{ url_for('profile.profile') }}">Профиль</a>
+                    {% endif %}
                     <a class="nav-link" href="{{ url_for('auth.logout') }}">Выйти</a>
                     {% else %}
                     <a class="nav-link" href="{{ url_for('auth.sign_in') }}">Войти</a>
