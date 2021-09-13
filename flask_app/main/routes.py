@@ -1,8 +1,8 @@
 import datetime
-from flask import render_template, request, Blueprint, flash
+from flask import render_template, request, Blueprint, flash, redirect, url_for
 from flask_login import login_required, current_user
 from flask_app import db
-from flask_app.models import Order
+from flask_app.models import Order, Day
 main = Blueprint('main', __name__)
 
 
@@ -12,6 +12,21 @@ def index():
     if request.method == "POST":
         date = request.form.get("calendar").split('-')
         date = datetime.date(*map(int, date))
+        day = Day.query.filter_by(date=date).first()
+
+        if day is None:
+            day = Day(date=date, orders_amount=20)
+            db.session.add(day)
+            db.session.commit()
+            print("Day added!")
+        else:
+            if day.orders_amount - int(request.form.get("amount")) < 0:
+                flash("На этот день нет столько мест!")
+                return redirect(url_for('main.index'))
+            else:
+                day.orders_amount -= int(request.form.get("amount"))
+                db.session.commit()
+
         order = Order(
             FCs=request.form.get("FCS"),
             phone=request.form.get("phone"),

@@ -38,8 +38,20 @@
                             {% else %}
                             Вес груза: {{ order.amount}}<br>
                             {% endif %}
+                        </p>
+                        {% if order.state == "Одобрено" %}
+                        <p style="color:green;">
                             Статус: {{ order.state }}
                         </p>
+                        {% elif order.state == "В обработке" %}
+                        <p style="color:yellow;">
+                            Статус: {{ order.state }}
+                        </p>
+                        {% else %}
+                        <p style="color:red;">
+                            Статус: {{ order.state }}
+                        </p>
+                        {% endif %}
                         <a href="{{ url_for('profile.delete_order',id=order.id) }}" class="card-link">Удалить</a>
                     </div>
                 </div>

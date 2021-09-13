@@ -54,6 +54,7 @@ class Order(db.Model):
     departure_point = db.Column(db.String(40), nullable=False)
     arrival_point = db.Column(db.String(40), nullable=False)
     order_type = db.Column(db.String(15), nullable=False)
+    # TODO поменять на Date
     date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     amount = db.Column(db.Integer)
     state = db.Column(db.String(10), nullable=False)
@@ -64,3 +65,13 @@ class Order(db.Model):
 
     def __repr__(self):
         return ""
+
+
+class Day(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    date = db.Column(db.Date, nullable=False,
+                     default=datetime.utcnow().date(), unique=True)
+    orders_amount = db.Column(db.Integer, nullable=False, default=20)
+
+    def __repr__(self):
+        return f"{self.date} {self.orders_amount}"
