@@ -1,5 +1,5 @@
 import datetime
-from flask import render_template, request, Blueprint, flash, redirect, url_for
+from flask import render_template, request, Blueprint, flash, redirect, url_for, current_app
 from flask_login import login_required, current_user
 from flask_app import db
 from flask_app.models import Order, Day
@@ -15,17 +15,22 @@ def index():
         day = Day.query.filter_by(date=date).first()
 
         if day is None:
-            day = Day(date=date, orders_amount=20)
+            day = Day(
+                date=date, orders_amount=current_app.config['ORDERS_AMOUNT'])
             db.session.add(day)
             db.session.commit()
-            print("Day added!")
         else:
-            if day.orders_amount - int(request.form.get("amount")) < 0:
-                flash("На этот день нет столько мест!")
-                return redirect(url_for('main.index'))
+            if request.form.get("ta") == "Пассажирская":
+                if day.orders_amount - int(request.form.get("amount")) < 0:
+                    flash("На этот день нет столько мест!")
+                    return redirect(url_for('main.index'))
+                else:
+                    day.orders_amount -= int(request.form.get("amount"))
+                    db.session.commit()
             else:
-                day.orders_amount -= int(request.form.get("amount"))
-                db.session.commit()
+                if day.orders_amount < 20:
+                    flash("Невозможно выполнить грузоперевозку в этот день!")
+                    return redirect(url_for('main.index'))
 
         order = Order(
             FCs=request.form.get("FCS"),

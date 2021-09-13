@@ -1,35 +1,60 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+    #card {
+        background-color: #CBF3F0;
+        border-radius: 7px;
+    }
+
+    #btn {
+        background-color: #FFBF69;
+        border-color: #FFBF69;
+    }
+</style>
 <div class="container">
     <div class="row">
         <!-- Профиль менеджера -->
         <div class="col">
-            <div class="card" style="width: 18rem;">
+            <div class="card" id="card" style="width: 18rem;">
                 <div class="card-body">
-                    <h5 class="card-title">{{ user.username }}</h5>
+                    <h4 class="card-title">{{ user.username }}</h4>
                     <h5 class="card-title">{{ "Менеджер" }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
                     <p class="card-text">
-                        <button type="button" class="btn btn-primary"><a
+                        <button type="button" class="btn btn-primary" id="btn"><a
                                 href="{{ url_for('profile.change_master_password') }}"
                                 style="text-decoration: none; color:white">Сменить пароль</a></button>
                     </p>
                     <p class="card-text">
-                        <button type="button" class="btn btn-primary"><a href="{{ url_for('profile.change_email') }}"
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('profile.change_email') }}"
                                 style="text-decoration: none; color:white">Сменить почту</a></button>
                     </p>
                     <p class="card-text">
-                        <button type="button" class="btn btn-primary"><a href="{{ url_for('manage.add_manager') }}"
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('manage.add_manager') }}"
                                 style="text-decoration: none; color:white">Добавить менеджера</a></button>
                     </p>
                 </div>
             </div>
+
+        </div>
+        <div class="col">
+            {% for day in days %}
+            <div class="card" id="card" style="width: 15rem">
+                <h5 class="card-title">День {{ day.date }}</h5>
+                <h6 class="card-title">Количество заявок: {{ day.order_amount }}</h6>
+                <p class="card-text">
+                    <a href="{{ url_for('manage.delete_day',id=day.id) }}">Удалить</a>
+                </p>
+            </div>
+            {% endfor %}
         </div>
         <!-- Заявки пользователя -->
         <div class="col">
             <div class="row">
                 {% for order in orders %}
-                <div class="card" style="width: 18rem; color:white;background-color: black;">
+                <div class="card" id="card" style="width: 18rem;color:#0D160B;">
                     <div class="card-body">
                         <h5 class="card-title">{{ order.date|date }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ order.FCs }}</h6>

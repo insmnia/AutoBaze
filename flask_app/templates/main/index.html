@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% block content %}
-
+<style>
+</style>
 <div class="container">
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
             <form class="form-horizontal" method="POST" action="">
-                <span class="heading">Оставить заявку</span>
+                <h3>Оставить заявку</h3>
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="ФИО" name="FCS">
                 </div>
@@ -27,8 +28,8 @@
                 </div>
                 <div class="form-group help">
                     <select name="ta" id="ta" class="selectpicker form-control">
-                        <option value="1">Пасажирская</option>
-                        <option value="2">Грузоперевозка</option>
+                        <option value="1" class="option-selected">Пасажирская</option>
+                        <option value="2" class="option-selected">Грузоперевозка</option>
                     </select>
                 </div>
                 <div class="form-group help">
@@ -43,7 +44,6 @@
 </div>
 <script>
     let trnsp = document.getElementById('ta');
-    console.log(trnsp)
     trnsp.addEventListener('change', function () {
         if (trnsp.value === "1") {
             document.getElementsByName("amount")[0].placeholder = "Количество пассажиров";

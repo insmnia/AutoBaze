@@ -55,7 +55,7 @@ class Order(db.Model):
     arrival_point = db.Column(db.String(40), nullable=False)
     order_type = db.Column(db.String(15), nullable=False)
     # TODO поменять на Date
-    date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
+    date = db.Column(db.Date, nullable=False, default=datetime.utcnow().date())
     amount = db.Column(db.Integer)
     state = db.Column(db.String(10), nullable=False)
     creator = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)

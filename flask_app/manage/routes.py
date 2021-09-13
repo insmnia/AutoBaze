@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_app import bcrypt, db
-from flask_app.models import User, Order
+from flask_app.models import User, Order, Day
 from flask_app.profile.forms import ChangeEmailForm, ChangePasswordForm
 from flask_app.manage.forms import AddManagerForm
 from flask_login import current_user, login_required
@@ -11,7 +11,13 @@ manage = Blueprint("manage", __name__)
 @manage.route('/cabinet', methods=['GET', 'POST'])
 @login_required
 def profile():
-    return render_template('manage/manager_profile.html', user=current_user, orders=Order.query.all(), title="Кабинет")
+    return render_template(
+        'manage/manager_profile.html',
+        user=current_user,
+        orders=Order.query.all(),
+        days=Day.query.all(),
+        title="Кабинет"
+    )
 
 
 @manage.route('/change_manager_password', methods=['GET', 'POST'])
@@ -91,4 +97,14 @@ def delete_order(id):
     db.session.delete(order)
     db.session.commit()
     flash("Заявка успешно удалена!")
+    return redirect(url_for('manage.profile'))
+
+
+@manage.route("/delete_day/<int:id>/")
+@login_required
+def delete_day(id):
+    day = Day.query.filter_by(id=int(id)).first()
+    db.session.delete(day)
+    db.session.commit()
+    flash("День успешно удален!")
     return redirect(url_for('manage.profile'))
