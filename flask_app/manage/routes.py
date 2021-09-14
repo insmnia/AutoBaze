@@ -8,13 +8,17 @@ from flask_login import current_user, login_required
 manage = Blueprint("manage", __name__)
 
 
-@manage.route('/cabinet', methods=['GET', 'POST'])
+@manage.route('/cabinet/<string:filter>', methods=['GET', 'POST'])
 @login_required
-def profile():
+def profile(filter):
+    if filter == "Все":
+        orders = Order.query.all()
+    else:
+        orders = Order.query.filter_by(state=filter).all()
     return render_template(
         'manage/manager_profile.html',
         user=current_user,
-        orders=Order.query.all(),
+        orders=orders,
         days=Day.query.all(),
         title="Кабинет"
     )

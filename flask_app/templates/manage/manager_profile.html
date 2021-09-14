@@ -37,7 +37,6 @@
                     </p>
                 </div>
             </div>
-
         </div>
         <div class="col">
             {% for day in days %}
@@ -52,6 +51,18 @@
         </div>
         <!-- Заявки пользователя -->
         <div class="col">
+            <div class="btn-group dropend">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    Фильтр
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a href="{{ url_for('manage.profile',filter='В обработке') }}">В обработке</a></li>
+                    <li><a href="{{ url_for('manage.profile',filter='Одобрено') }}">Одобрено</a></li>
+                    <li><a href="{{ url_for('manage.profile',filter='Отклонено') }}">Отклонено</a></li>
+                    <li><a href="{{ url_for('manage.profile',filter='Все') }}">Сбросить<a></li>
+                </ul>
+            </div>
             <div class="row">
                 {% for order in orders %}
                 <div class="card" id="card" style="width: 18rem;color:#0D160B;">
