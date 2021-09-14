@@ -46,7 +46,22 @@ class User(db.Model, UserMixin):
         return User.query.get(id)
 
 
+stops_table = db.Table("stops_table", db.Model.metadata,
+                       db.Column("order_id", db.Integer,
+                                 db.ForeignKey("order.id")),
+                       db.Column("stop_id", db.Integer,
+                                 db.ForeignKey("stop.id"))
+                       )
+
+
+class Stop(db.Model):
+    __tablename__ = "stop"
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False, unique=True)
+
+
 class Order(db.Model):
+    __tablename__ = "order"
     id = db.Column(db.Integer, primary_key=True)
     FCs = db.Column(db.String(40), nullable=False)
     phone = db.Column(db.String(10), nullable=False)
@@ -54,17 +69,22 @@ class Order(db.Model):
     departure_point = db.Column(db.String(40), nullable=False)
     arrival_point = db.Column(db.String(40), nullable=False)
     order_type = db.Column(db.String(15), nullable=False)
-    # TODO поменять на Date
     date = db.Column(db.Date, nullable=False, default=datetime.utcnow().date())
     amount = db.Column(db.Integer)
     state = db.Column(db.String(10), nullable=False)
     creator = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    stops = db.relationship(
+        "Stop", secondary=stops_table
+    )
 
     def change_state(self, new_state):
         self.state = new_state
 
     def __repr__(self):
         return ""
+
+    def add_stop(self, stop):
+        self.stops.append(stop)
 
 
 class Day(db.Model):
