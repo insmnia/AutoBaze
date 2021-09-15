@@ -6,7 +6,7 @@ from flask_app.models import User
 
 class ChangePasswordForm(FlaskForm):
     current_password = PasswordField(
-        "Мастер-пароль", validators=[DataRequired()])
+        "Старый пароль", validators=[DataRequired()])
     new_password = PasswordField("Новый пароль", validators=[DataRequired()])
     submit = SubmitField("Сменить")
 

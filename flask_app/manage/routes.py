@@ -10,7 +10,7 @@ manage = Blueprint("manage", __name__)
 
 @manage.route('/cabinet/<string:filter>', methods=['GET', 'POST'])
 @login_required
-def profile(filter):
+def mprofile(filter):
     if filter == "Все":
         orders = Order.query.all()
     else:
@@ -36,10 +36,10 @@ def change_master_password():
                 form.new_password.data).decode('utf-8')
             db.session.commit()
             flash('Пароль успешно сменен!', "success")
-            return redirect(url_for('profile.profile'))
+            return redirect(url_for('manage.mprofile', filter="Все"))
         else:
             flash('Мастер-пароль введен неверно и/или пароли совпадают')
-            return redirect(url_for('profile.change_master_password'))
+            return redirect(url_for('manage.change_master_password'))
     return render_template('profile/change_master_password.html', form=form, title="Смена пароля")
 
 
@@ -51,7 +51,7 @@ def change_email():
         current_user.change_email(form.new_email.data)
         db.session.commit()
         flash("Почта успешно сменена!")
-        return redirect(url_for('profile.profile'))
+        return redirect(url_for('manage.mprofile', filter="Все"))
     return render_template('profile/change_email.html', form=form, title="Смена почты")
 
 
@@ -63,15 +63,15 @@ def add_manager():
         print(current_user)
         if not current_user.manager:
             flash("Недостаточно прав")
-            return redirect(url_for('profile.profile'))
+            return redirect(url_for('manage.mprofile', filter="Все"))
         manager = User.query.filter_by(username=form.username.data).first()
         if manager is None:
             flash("Нет такого пользователя!")
-            return redirect(url_for('profile.profile'))
+            return redirect(url_for('manage.mprofile', filter="Все"))
         manager.manager = 1
         db.session.commit()
         flash("Менеджер добавлен!")
-        return redirect(url_for('manage.profile', filter="Все"))
+        return redirect(url_for('manage.mprofile', filter="Все"))
     return render_template('manage/add_manager.html', form=form, title="Управление")
 
 
@@ -82,7 +82,7 @@ def accept_order(id):
     order.state = "Одобрено"
     db.session.commit()
     flash("Изменения внесены")
-    return redirect(url_for("manage.profile", filter="Все"))
+    return redirect(url_for("manage.mprofile", filter="Все"))
 
 
 @manage.route("/decline_order/<int:id>")
@@ -92,7 +92,7 @@ def decline_order(id):
     order.state = "Отклонено"
     db.session.commit()
     flash("Изменения внесены")
-    return redirect(url_for("manage.profile", filter="Все"))
+    return redirect(url_for("manage.mprofile", filter="Все"))
 
 
 @manage.route("/order/<int:id>/delete")
@@ -102,23 +102,29 @@ def delete_order(id):
     db.session.delete(order)
     db.session.commit()
     flash("Заявка успешно удалена!")
-    return redirect(url_for('manage.profile', filter="Все"))
+    return redirect(url_for('manage.mprofile', filter="Все"))
 
 
 @manage.route("/delete_day/<int:id>/")
 @login_required
 def delete_day(id):
     day = Day.query.filter_by(id=int(id)).first()
+    orders = Order.query.filter_by(date=day.date).all()
+    db.session.delete(*orders)
     db.session.delete(day)
     db.session.commit()
     flash("День успешно удален!")
-    return redirect(url_for('manage.profile', filter="Все"))
+    return redirect(url_for('manage.mprofile', filter="Все"))
 
 
 @manage.route("/bind_stop/<int:order_id>/to/<int:stop_id>")
 @login_required
 def bind_stop(order_id, stop_id):
-    return redirect(url_for('manage.profile', filter="Все"))
+    order = Order.query.filter_by(id=int(order_id)).first()
+    order.add_stop(Stop.query.filter_by(id=int(stop_id)).first())
+    db.session.commit()
+    flash("Остановка успешно закреплена!")
+    return redirect(url_for('manage.detailed_order', id=order.id))
 
 
 @manage.route("/add_stop", methods=['GET', 'POST'])
@@ -131,3 +137,21 @@ def add_stop():
         db.session.commit()
         flash("Остановка успешно добавлена!")
     return render_template('manage/add_stop.html', form=form)
+
+
+@manage.route("/details/order/<int:id>", methods=['GET', 'POST'])
+def detailed_order(id):
+    order = Order.query.filter_by(id=int(id)).first()
+    return render_template('manage/order_detailed.html', order=order, stops=Stop.query.all())
+
+
+@manage.route("/remove_stop/<int:stop_id>/<int:order_id>", methods=['GET', 'POST'])
+@login_required
+def remove_stop(stop_id, order_id):
+    order = Order.query.filter_by(id=int(order_id)).first()
+    order.remove_stop(Stop.query.filter_by(id=int(stop_id)).first())
+    db.session.commit()
+    flash("Остановка успешно удалена")
+    return redirect(url_for("manage.detailed_order", id=order.id))
+
+# TODO отчёт

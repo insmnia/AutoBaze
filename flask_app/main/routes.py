@@ -18,19 +18,18 @@ def index():
             day = Day(
                 date=date, orders_amount=current_app.config['ORDERS_AMOUNT'])
             db.session.add(day)
-            db.session.commit()
-        else:
-            if request.form.get("ta") == "Пассажирская":
-                if day.orders_amount - int(request.form.get("amount")) < 0:
-                    flash("На этот день нет столько мест!")
-                    return redirect(url_for('main.index'))
-                else:
-                    day.orders_amount -= int(request.form.get("amount"))
-                    db.session.commit()
+        if request.form.get("ta") == "1":
+            if day.orders_amount - int(request.form.get("amount")) < 0:
+                flash("На этот день нет столько мест!")
+                return redirect(url_for('main.index'))
             else:
-                if day.orders_amount < 20:
-                    flash("Невозможно выполнить грузоперевозку в этот день!")
-                    return redirect(url_for('main.index'))
+                day.orders_amount -= int(request.form.get("amount"))
+        else:
+            if day.orders_amount < 20:
+                flash("Невозможно выполнить грузоперевозку в этот день!")
+                return redirect(url_for('main.index'))
+            else:
+                day.orders_amount -= 20
 
         order = Order(
             FCs=request.form.get("FCS"),

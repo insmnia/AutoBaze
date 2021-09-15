@@ -42,6 +42,8 @@ def change_email():
         return redirect(url_for('profile.profile'))
     return render_template('profile/change_email.html', form=form, title="Смена почты")
 
+# TODO неправильный редирект
+
 
 @prof.route("/order/<int:id>/delete")
 @login_required
@@ -50,4 +52,4 @@ def delete_order(id):
     db.session.delete(order)
     db.session.commit()
     flash("Заявка успешно удалена!")
-    return redirect(url_for('profile.profile'))
+    return redirect(url_for('main.index'))

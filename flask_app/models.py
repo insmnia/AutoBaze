@@ -59,6 +59,9 @@ class Stop(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False, unique=True)
 
+    def __repr__(self):
+        return self.name
+
 
 class Order(db.Model):
     __tablename__ = "order"
@@ -87,11 +90,15 @@ class Order(db.Model):
         self.stops.append(stop)
 
     def check_stop(self, stop):
-        return stop in self.stops
+        return self.stops.filter(
+            stops_table.c.stop_id == stop.id
+        ).count() > 0
 
     def remove_stop(self, stop):
-        if check_stop(stop):
-            self.stops.remove(stop)
+        # TODO разобраться с проверкой
+        # if self.check_stop(stop):
+        #     print("DELETE")
+        self.stops.remove(stop)
 
 
 class Day(db.Model):

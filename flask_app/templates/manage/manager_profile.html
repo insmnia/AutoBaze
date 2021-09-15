@@ -1,15 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
-    #card {
-        background-color: #CBF3F0;
-        border-radius: 7px;
-    }
-
-    #btn {
-        background-color: #FFBF69;
-        border-color: #FFBF69;
-    }
 </style>
 <div class="container">
     <div class="row">
@@ -22,12 +13,12 @@
                     <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
                     <p class="card-text">
                         <button type="button" class="btn btn-primary" id="btn"><a
-                                href="{{ url_for('profile.change_master_password') }}"
+                                href="{{ url_for('manage.change_master_password') }}"
                                 style="text-decoration: none; color:white">Сменить пароль</a></button>
                     </p>
                     <p class="card-text">
                         <button type="button" class="btn btn-primary" id="btn"><a
-                                href="{{ url_for('profile.change_email') }}"
+                                href="{{ url_for('manage.change_email') }}"
                                 style="text-decoration: none; color:white">Сменить почту</a></button>
                     </p>
                     <p class="card-text">
@@ -47,7 +38,7 @@
             {% for day in days %}
             <div class="card" id="card" style="width: 15rem">
                 <h5 class="card-title">День {{ day.date }}</h5>
-                <h6 class="card-title">Количество заявок: {{ day.order_amount }}</h6>
+                <h6 class="card-title">Количество заявок: {{ 20-day.orders_amount }}</h6>
                 <p class="card-text">
                     <a href="{{ url_for('manage.delete_day',id=day.id) }}">Удалить</a>
                 </p>
@@ -62,10 +53,10 @@
                     Фильтр
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="{{ url_for('manage.profile',filter='В обработке') }}">В обработке</a></li>
-                    <li><a href="{{ url_for('manage.profile',filter='Одобрено') }}">Одобрено</a></li>
-                    <li><a href="{{ url_for('manage.profile',filter='Отклонено') }}">Отклонено</a></li>
-                    <li><a href="{{ url_for('manage.profile',filter='Все') }}">Сбросить<a></li>
+                    <li><a href="{{ url_for('manage.mprofile',filter='В обработке') }}">В обработке</a></li>
+                    <li><a href="{{ url_for('manage.mprofile',filter='Одобрено') }}">Одобрено</a></li>
+                    <li><a href="{{ url_for('manage.mprofile',filter='Отклонено') }}">Отклонено</a></li>
+                    <li><a href="{{ url_for('manage.mprofile',filter='Все') }}">Сбросить<a></li>
                 </ul>
             </div>
             <div class="row">
@@ -75,17 +66,7 @@
                         <h5 class="card-title">{{ order.date|date }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ order.FCs }}</h6>
                         <h6 class="card-subtitle mb-2 text-muted">{{ order.email }}</h6>
-                        <p class="card-text">
-                            Пункт отправления: {{ order.departure_point }}<br>
-                            Пункт прибытия: {{ order.arrival_point }}<br>
-                            Тип доставки: {{ order.order_type }}<br>
-                            {% if order.order_type == "Пассажирская" %}
-                            Количество пассажиров: {{ order.amount}}<br>
-                            {% else %}
-                            Вес груза: {{ order.amount}}<br>
-                            {% endif %}
-                            Остановки: {{order.stops}}
-                        </p>
+
                         {% if order.state == "Одобрено" %}
                         <p style="color:green;">
                             Статус: {{ order.state }}
@@ -99,24 +80,29 @@
                             Статус: {{ order.state }}
                         </p>
                         {% endif %}
-                        <a href="{{ url_for('manage.accept_order',id=order.id) }}" class="card-link">Принять</a>
-                        <a href="{{ url_for('manage.decline_order',id=order.id) }}" class="card-link">Отклонить</a>
-                        <a href="{{ url_for('manage.delete_order',id=order.id) }}" class="card-link">Удалить</a>
-                        <hr>
+
+                        <p>
+                            <a href="{{ url_for('manage.detailed_order',id=order.id) }}" class="card-link">Детально</a>
+                        </p>
                         <div class="btn-group dropend">
                             <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
                                 aria-expanded="false">
-                                Добавить остановку
+                                Управление
                             </button>
                             <ul class="dropdown-menu">
-                                {% for stop in stops %}
-                                <li><a href="{{ url_for('manage.bind_stop',stop_id=stop.id,order_id=order.id) }}">{{
-                                        stop.name }}</a>
+                                <li><a href="{{ url_for('manage.accept_order',id=order.id) }}"
+                                        class="card-link">Принять</a>
                                 </li>
-                                {% endfor %}
+                                <li><a href="{{ url_for('manage.decline_order',id=order.id) }}"
+                                        class="card-link">Отклонить</a>
+                                </li>
+                                <li><a href="{{ url_for('manage.delete_order',id=order.id) }}"
+                                        class="card-link">Удалить</a>
+                                </li>
                             </ul>
                         </div>
                     </div>
+
                 </div>
                 {% endfor %}
             </div>
