@@ -86,6 +86,13 @@ class Order(db.Model):
     def add_stop(self, stop):
         self.stops.append(stop)
 
+    def check_stop(self, stop):
+        return stop in self.stops
+
+    def remove_stop(self, stop):
+        if check_stop(stop):
+            self.stops.remove(stop)
+
 
 class Day(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -8,3 +8,9 @@ class AddManagerForm(FlaskForm):
     username = StringField(label="Имя пользователя",
                            validators=[DataRequired()])
     submit = SubmitField("Добавить")
+
+
+class AddStopForm(FlaskForm):
+    name = StringField(label="Название остановки",
+                       validators=[DataRequired()])
+    submit = SubmitField("Добавить")
