@@ -4,7 +4,7 @@ from flask_app.models import User, Order, Day, Stop
 from flask_app.profile.forms import ChangeEmailForm, ChangePasswordForm
 from flask_app.manage.forms import AddManagerForm, AddStopForm
 from flask_login import current_user, login_required
-
+import datetime
 manage = Blueprint("manage", __name__)
 
 
@@ -156,15 +156,20 @@ def remove_stop(stop_id, order_id):
     flash("Остановка успешно удалена")
     return redirect(url_for("manage.detailed_order", id=order.id))
 
-# TODO отчёт
+# TODO доделать отчёт
 
 
 @manage.route("/create_report", methods=['GET', 'POST'])
 @login_required
 def create_report():
     if request.method == "POST":
-        date_from = datetime.date(
-            *map(int, request.form.get("date_from").split('-')))
-        date_to = datetime.date(
-            *map(int, request.form.get("date_to").split('-')))
-    return render_template("manage/create_report.html")
+        orders = Order.query.filter(
+            Order.date.between(request.form.get("date_from"), request.form.get("date_to"))).all()
+        import csv
+        with open(f"report-{str(datetime.datetime.now().date)}", 'w') as f:
+            writer = csv.writer(f)
+            for order in orders:
+                writer.writerow(str(order))
+
+        return redirect(url_for('manage.create_report'))
+    return render_template("manage/create_report.html", title='Отчёт', today=str(datetime.datetime.now().date()))

@@ -84,7 +84,10 @@ class Order(db.Model):
         self.state = new_state
 
     def __repr__(self):
-        return ""
+        return f"{self.id}, {self.FCs}, {self.phone}, {self.email}, {self.date}, {self.order_type}, {self.amount}"
+
+    def __str__(self):
+        return f"{self.id}, {self.FCs}, {self.phone}, {self.email}, {self.date}, {self.order_type}, {self.amount}"
 
     def add_stop(self, stop):
         self.stops.append(stop)
