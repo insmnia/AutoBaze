@@ -99,6 +99,8 @@ def decline_order(id):
 @login_required
 def delete_order(id):
     order = Order.query.filter_by(id=int(id)).first()
+    day = Day.query.filter_by(date=order.date).first()
+    day += order.amount
     db.session.delete(order)
     db.session.commit()
     flash("Заявка успешно удалена!")
@@ -155,3 +157,14 @@ def remove_stop(stop_id, order_id):
     return redirect(url_for("manage.detailed_order", id=order.id))
 
 # TODO отчёт
+
+
+@manage.route("/create_report", methods=['GET', 'POST'])
+@login_required
+def create_report():
+    if request.method == "POST":
+        date_from = datetime.date(
+            *map(int, request.form.get("date_from").split('-')))
+        date_to = datetime.date(
+            *map(int, request.form.get("date_to").split('-')))
+    return render_template("manage/create_report.html")
