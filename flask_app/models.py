@@ -92,15 +92,7 @@ class Order(db.Model):
     def add_stop(self, stop):
         self.stops.append(stop)
 
-    def check_stop(self, stop):
-        return self.stops.filter(
-            stops_table.c.stop_id == stop.id
-        ).count() > 0
-
     def remove_stop(self, stop):
-        # TODO разобраться с проверкой
-        # if self.check_stop(stop):
-        #     print("DELETE")
         self.stops.remove(stop)
 
 

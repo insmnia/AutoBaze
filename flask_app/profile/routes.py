@@ -1,6 +1,6 @@
 from flask import render_template, request, Blueprint, flash, redirect, url_for
 from flask_app.profile.forms import ChangePasswordForm, ChangeEmailForm
-from flask_app.models import User, Order
+from flask_app.models import User, Order, Day
 from flask_login import login_required, current_user
 from flask_app import bcrypt, db
 
@@ -42,13 +42,13 @@ def change_email():
         return redirect(url_for('profile.profile'))
     return render_template('profile/change_email.html', form=form, title="Смена почты")
 
-# TODO неправильный редирект
-
 
 @prof.route("/order/<int:id>/delete")
 @login_required
-def delete_order(id):
+def delete_uorder(id):
     order = Order.query.filter_by(id=int(id)).first()
+    day = Day.query.filter_by(date=order.date).first()
+    day.orders_amount += order.amount
     db.session.delete(order)
     db.session.commit()
     flash("Заявка успешно удалена!")

@@ -11,8 +11,13 @@ manage = Blueprint("manage", __name__)
 @manage.route('/cabinet/<string:filter>', methods=['GET', 'POST'])
 @login_required
 def mprofile(filter):
+    # TODO доработать фильтры
     if filter == "Все":
         orders = Order.query.all()
+    # elif filter == "Пассажирская":
+    #     orders = Order.query.filter_by(order_type="Пассажирская")
+    # elif filter == "Грузоперевозка":
+    #     orders = Order.query.filter_by(order_type="Грузоперевозка")
     else:
         orders = Order.query.filter_by(state=filter).all()
     return render_template(
@@ -100,11 +105,11 @@ def decline_order(id):
 def delete_order(id):
     order = Order.query.filter_by(id=int(id)).first()
     day = Day.query.filter_by(date=order.date).first()
-    day += order.amount
+    day.orders_amount += order.amount
     db.session.delete(order)
     db.session.commit()
     flash("Заявка успешно удалена!")
-    return redirect(url_for('manage.mprofile', filter="Все"))
+    return redirect(url_for('main.index'))
 
 
 @manage.route("/delete_day/<int:id>/")
@@ -156,13 +161,14 @@ def remove_stop(stop_id, order_id):
     flash("Остановка успешно удалена")
     return redirect(url_for("manage.detailed_order", id=order.id))
 
-# TODO доделать отчёт
-
 
 @manage.route("/create_report", methods=['GET', 'POST'])
 @login_required
 def create_report():
     if request.method == "POST":
+        if not request.form.get("date_from") and not request.form.get("date_to"):
+            flash("Заполните форму!")
+            return redirect(url_for("manage.create_report"))
         orders = Order.query.filter(
             Order.date.between(request.form.get("date_from"), request.form.get("date_to"))).all()
         import csv
@@ -173,3 +179,11 @@ def create_report():
 
         return redirect(url_for('manage.create_report'))
     return render_template("manage/create_report.html", title='Отчёт', today=str(datetime.datetime.now().date()))
+
+
+@manage.route("/day_details/<int:id>", methods=['GET', 'POST'])
+@login_required
+def day_details(id):
+    day = Day.query.filter_by(id=int(id)).first()
+    orders = Order.query.filter_by(date=day.date).all()
+    return render_template("manage/day_details.html", title='День', day=day, orders=orders)

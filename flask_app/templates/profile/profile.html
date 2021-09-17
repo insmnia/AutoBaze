@@ -52,7 +52,7 @@
                             Статус: {{ order.state }}
                         </p>
                         {% endif %}
-                        <a href="{{ url_for('profile.delete_order',id=order.id) }}" class="card-link">Удалить</a>
+                        <a href="{{ url_for('profile.delete_uorder',id=order.id) }}" class="card-link">Удалить</a>
                     </div>
                 </div>
                 {% endfor %}
