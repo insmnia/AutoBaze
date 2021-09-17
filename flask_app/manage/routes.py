@@ -109,7 +109,7 @@ def delete_order(id):
     db.session.delete(order)
     db.session.commit()
     flash("Заявка успешно удалена!")
-    return redirect(url_for('main.index'))
+    return redirect(url_for('manage.mprofile', filter="Все"))
 
 
 @manage.route("/delete_day/<int:id>/")

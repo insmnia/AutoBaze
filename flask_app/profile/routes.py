@@ -43,7 +43,7 @@ def change_email():
     return render_template('profile/change_email.html', form=form, title="Смена почты")
 
 
-@prof.route("/order/<int:id>/delete")
+@prof.route("/uorder/<int:id>/delete")
 @login_required
 def delete_uorder(id):
     order = Order.query.filter_by(id=int(id)).first()
@@ -52,4 +52,4 @@ def delete_uorder(id):
     db.session.delete(order)
     db.session.commit()
     flash("Заявка успешно удалена!")
-    return redirect(url_for('main.index'))
+    return redirect(url_for('profile.profile'))
