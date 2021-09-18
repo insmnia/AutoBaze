@@ -172,7 +172,7 @@ def create_report():
         orders = Order.query.filter(
             Order.date.between(request.form.get("date_from"), request.form.get("date_to"))).all()
         import csv
-        with open(f"report-{str(datetime.datetime.now().date)}", 'w') as f:
+        with open(f"report-{str(datetime.datetime.now().date())}", 'w') as f:
             writer = csv.writer(f)
             for order in orders:
                 writer.writerow(str(order))
