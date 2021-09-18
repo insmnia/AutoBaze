@@ -1,5 +1,5 @@
-from flask_app import create_app, db
-from flask_app.models import User, Order
+from app import create_app, db
+from app.models import User, Order
 
 app = create_app()
 
