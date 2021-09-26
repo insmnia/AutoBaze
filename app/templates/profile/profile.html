@@ -24,40 +24,38 @@
         <div class="col">
             <div class="row">
                 {% for order in user.orders %}
-                <div class="card" style="width: 18rem;">
+                <div class="card" style="width: 20rem;">
                     <div class="card-body">
-                        <h5 class="card-title">{{ order.date|date }}</h5>
+                        <h5 class="card-title">Заявка от {{ order.date|date }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ order.FCs }}</h6>
                         <h6 class="card-subtitle mb-2 text-muted">{{ order.email }}</h6>
-                        <p class="card-text">
-                            Пункт отправления: {{ order.departure_point }}<br>
-                            Пункт прибытия: {{ order.arrival_point }}<br>
-                            Тип доставки: {{ order.order_type }}<br>
-                            {% if order.order_type == "Пассажирская" %}
-                            Количество пассажиров: {{ order.amount}}<br>
-                            {% else %}
-                            Вес груза: {{ order.amount}}<br>
-                            {% endif %}
-                        </p>
-                        {% if order.state == "Одобрено" %}
-                        <p style="color:green;">
-                            Статус: {{ order.state }}
-                        </p>
-                        {% elif order.state == "В обработке" %}
-                        <p style="color:yellow;">
-                            Статус: {{ order.state }}
-                        </p>
-                        {% else %}
-                        <p style="color:red;">
-                            Статус: {{ order.state }}
-                        </p>
-                        {% endif %}
-                        <a href="{{ url_for('profile.delete_uorder',id=order.id) }}" class="card-link">Удалить</a>
+                        <div class="btn-group dropend">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                Действия
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                <li>
+                                    <button class="btn btn-outline-primary" type="button"style="color:black">
+                                        <a href="{{ url_for('manage.detailed_order',id=order.id) }}" class="card-link"
+                                            style="text-decoration: none;color:black">Подробнее</a>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
+                                        <a href="{{ url_for('profile.delete_uorder',id=order.id) }}" class="card-link"
+                                            style="text-decoration: none;color:black">Удалить</a>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
         </div>
     </div>
+
+</div>
 </div>
 {% endblock %}

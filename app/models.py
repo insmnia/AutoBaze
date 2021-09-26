@@ -74,6 +74,7 @@ class Order(db.Model):
     order_type = db.Column(db.String(15), nullable=False)
     date = db.Column(db.Date, nullable=False, default=datetime.utcnow().date())
     amount = db.Column(db.Integer)
+    auto = db.Column(db.String(25))
     state = db.Column(db.String(10), nullable=False)
     creator = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     stops = db.relationship(
@@ -84,7 +85,7 @@ class Order(db.Model):
         self.state = new_state
 
     def __repr__(self):
-        return f"{self.id}, {self.FCs}, {self.phone}, {self.email}, {self.date}, {self.order_type}, {self.amount}"
+        return f"{self.id}, {self.FCs}, {self.phone}, {self.email}, {self.date}, {self.order_type}, {self.amount}, {self.auto}"
 
     def __str__(self):
         return f"{self.id}, {self.FCs}, {self.phone}, {self.email}, {self.date}, {self.order_type}, {self.amount}"

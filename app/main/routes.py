@@ -17,7 +17,10 @@ def index():
         departure_point = request.form.get("from")
         arrival_point = request.form.get("to")
         amount = request.form.get("amount")
-        if not all([Fcs, phone, email, departure_point, arrival_point, amount]):
+        auto = request.form.get("auto")
+        if request.form.get("ta")=="2":
+            amount = 20
+        if not all([Fcs, phone, email, departure_point, arrival_point, amount, auto]):
             flash("Заполните форму полностью!")
             return redirect(url_for('main.index'))
 
@@ -53,7 +56,8 @@ def index():
             amount=amount,
             state="В обработке",
             creator=current_user.id,
-            date=date
+            date=date,
+            auto=auto
         )
         db.session.add(order)
         db.session.commit()

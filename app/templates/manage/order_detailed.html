@@ -1,20 +1,21 @@
 {% extends "base.html"%}
 
 {% block content%}
-<h5 class="card-title">{{ order.date|date }}</h5>
-<h6 class="card-subtitle mb-2 text-muted">{{ order.FCs }}</h6>
-<h6 class="card-subtitle mb-2 text-muted">{{ order.email }}</h6>
+<h5 class="card-title"><b> Заявка от {{ order.date|date }}</b></h5>
+<h6 class="card-subtitle mb-2 text-muted"><b>{{ order.FCs }}</b></h6>
+<h6 class="card-subtitle mb-2 text-muted"><b>{{ order.email }}</b></h6>
 <p class="card-text">
-    Пункт отправления: {{ order.departure_point }}<br>
-    Пункт прибытия: {{ order.arrival_point }}<br>
-    Тип доставки: {{ order.order_type }}<br>
+    Пункт отправления: <b>{{ order.departure_point }}</b><br>
+    Пункт прибытия: <b>{{ order.arrival_point }}</b><br>
+    Тип доставки: <b>{{ order.order_type }}</b><br>
     {% if order.order_type == "Пассажирская" %}
-    Количество пассажиров: {{ order.amount}}<br>
+    Количество пассажиров: <b>{{ order.amount}}</b><br>
     {% else %}
-    Вес груза: {{ order.amount}}<br>
+    Транспорт для доставки: <b>{{ order.auto}}</b><br>
     {% endif %}
-    Остановки: {{order.stops}}
+    Остановки: <b>{{order.stops}}</b>
 </p>
+{% if current_user.manager %}
 <div class="btn-group dropend">
     <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
         Добавить остановку
@@ -43,5 +44,6 @@
     {% endif %}
 </div>
 </p>
+{% endif %}
 
 {% endblock content%}

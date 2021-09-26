@@ -33,7 +33,12 @@
                     </select>
                 </div>
                 <div class="form-group help">
-                    <input type="text" class="form-control" name="amount" placeholder="Количество пассажиров">
+                    <input type="text" class="form-control" name="amount" id="amount" placeholder="Количество пассажиров">
+                    <select class="selectpicker form-control" name="auto" id="auto" style="visibility: hidden;">
+                        <option value="Микроавтобус" class="option-selected">Микроавтобус</option>
+                        <option value="Грузовик" class="option-selected">Грузовик</option>
+                        <option value="Фура" class="option-selected">Фура</option>
+                    </select>
                 </div>
                 <div class="form-group help">
                     <button type="submit" class="btn btn-default">Отправить</button>
@@ -46,10 +51,12 @@
     let trnsp = document.getElementById('ta');
     trnsp.addEventListener('change', function () {
         if (trnsp.value === "1") {
-            document.getElementsByName("amount")[0].placeholder = "Количество пассажиров";
+            document.getElementsByName("amount")[0].style.visibility = "visible";
+            document.getElementById("auto").style.visibility = 'hidden';
         }
         else if (trnsp.value === "2") {
-            document.getElementsByName("amount")[0].placeholder = "Вес груза (в тоннах)";
+            document.getElementsByName("amount")[0].style.visibility = "hidden";
+            document.getElementById("auto").style.visibility = 'visible';
         }
     });
 </script>

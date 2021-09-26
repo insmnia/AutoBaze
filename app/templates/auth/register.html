@@ -64,12 +64,14 @@
                     {{ form.submit(class="btn btn-outline-info") }}
                 </div>
             </form>
+            <hr>
+            <div class="border-top pt-3">
+                <small class="text-muted">
+                    Уже есть аккаунт? <a class="ml-2" href="{{ url_for('auth.sign_in') }}">Войти</a>
+                </small>
+            </div>
         </div>
-        <div class="border-top pt-3">
-            <small class="text-muted">
-                Уже есть аккаунт? <a class="ml-2" href="{{ url_for('auth.sign_in') }}">Войти</a>
-            </small>
-        </div>
+        
     </div>
 </div>
 {% endblock %}

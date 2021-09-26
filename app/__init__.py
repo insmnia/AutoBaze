@@ -5,10 +5,10 @@ from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
 from flask_mail import Mail
 from app.config import Config
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-# db = SQLAlchemy()
+# app = Flask(__name__)
+# app.config.from_object(Config)
+# db = SQLAlchemy(app)
+db = SQLAlchemy()
 bcrypt = Bcrypt()
 mail = Mail()
 
