@@ -83,48 +83,117 @@
             </div> -->
             <div class="row">
                 {% for order in orders %}
-                <div class="card" id="card" style="width: 20rem;color:#0D160B;">
+                <div class="card" style="width: 20rem;">
                     <div class="card-body">
-                        <h5 class="card-title">{{ order.date|date }}</h5>
+                        <h5 class="card-title">Заявка от {{ order.date|date }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ order.FCs }}</h6>
                         <h6 class="card-subtitle mb-2 text-muted">{{ order.email }}</h6>
-
-                        {% if order.state == "Одобрено" %}
-                        <p style="color:green;">
-                            Статус: {{ order.state }}
-                        </p>
-                        {% elif order.state == "В обработке" %}
-                        <p style="color:yellow;">
-                            Статус: {{ order.state }}
-                        </p>
-                        {% else %}
-                        <p style="color:red;">
-                            Статус: {{ order.state }}
-                        </p>
-                        {% endif %}
-
-                        <p>
-                            <a href="{{ url_for('manage.detailed_order',id=order.id) }}" class="card-link">Детально</a>
-                        </p>
-                        <div class="btn-group dropend">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                Управление
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="{{ url_for('manage.accept_order',id=order.id) }}"
-                                        class="card-link">Принять</a>
-                                </li>
-                                <li><a href="{{ url_for('manage.decline_order',id=order.id) }}"
-                                        class="card-link">Отклонить</a>
-                                </li>
-                                <li><a href="{{ url_for('manage.delete_order',id=order.id) }}"
-                                        class="card-link">Удалить</a>
-                                </li>
-                            </ul>
-                        </div>
+                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#OrderInfo{{order.id}}" aria-controls="offcanvasExample">
+                            Подробнее
+                        </button>
                     </div>
 
+                </div>
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="OrderInfo{{order.id}}"
+                    aria-labelledby="offcanvasExampleLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Заявка от {{ order.date|date }}</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                            aria-label="Закрыть"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                            <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.FCs }}</b></h6>
+                            <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.email }}</b></h6>
+                            <p class="card-text">
+                                Пункт отправления: <b>{{ order.departure_point }}</b><br>
+                                Пункт прибытия: <b>{{ order.arrival_point }}</b><br>
+                                Тип доставки: <b>{{ order.order_type }}</b><br>
+                                {% if order.order_type == "Пассажирская" %}
+                                Количество пассажиров: <b>{{ order.amount}}</b><br>
+                                {% else %}
+                                Транспорт для доставки: <b>{{ order.auto}}</b><br>
+                                {% endif %}
+                                Остановки: <b>{{order.stops}}</b>
+                            </p>
+                            <div class="dropdown mt-3">
+                                <button class="btn btn-disabled" type="button" id="dropdownMenuButton"
+                                    data-bs-toggle="">
+                                    Статус: <b>{{order.state}}</b>
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    {% for stop in stops %}
+                                    <li><a href="{{ url_for('manage.bind_stop',stop_id=stop.id,order_id=order.id,t='p') }}">{{
+                                            stop.name }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div class="btn-group dropend">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Управление
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li>
+                                        <button type="button" class="btn btn-outline-success" id="liveToastBtn">
+                                            <a class="dropdown-item"
+                                                href="{{ url_for('manage.accept_order',id=order.id) }}">
+                                                Принять
+                                            </a>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="button" class="btn btn-outline-warning" id="liveToastBtn">
+                                            <a class="dropdown-item"
+                                                href="{{ url_for('manage.decline_order',id=order.id) }}">
+                                                Отклонить
+                                            </a>
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
+                                            <a class="dropdown-item"
+                                                href="{{ url_for('manage.delete_order',id=order.id) }}">
+                                                Удалить
+                                            </a>
+                                        </button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <p>
+                            <div class="btn-group dropend">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Добавить остановку
+                                </button>
+                                <ul class="dropdown-menu">
+                                    {% for stop in stops %}
+                                    <li><a href="{{ url_for('manage.bind_stop',stop_id=stop.id,order_id=order.id,t='p') }}">{{
+                                            stop.name }}</a>
+                                    </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            </p>
+                            <p>
+                                <div class="btn-group dropend">
+                                    {% if order.stops %}
+                                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        Удалить остановку
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        {% for stop in order.stops %}
+                                        <li><a href="{{ url_for('manage.remove_stop',stop_id=stop.id,order_id=order.id,t='p') }}">{{
+                                                stop.name }}</a>
+                                        </li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                </div>
+                            </p>
+                    </div>
                 </div>
                 {% endfor %}
             </div>

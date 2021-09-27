@@ -117,21 +117,25 @@ def delete_order(id):
 def delete_day(id):
     day = Day.query.filter_by(id=int(id)).first()
     orders = Order.query.filter_by(date=day.date).all()
-    db.session.delete(*orders)
+    for order in orders:
+        db.session.delete(order)
     db.session.delete(day)
     db.session.commit()
     flash("День успешно удален!")
     return redirect(url_for('manage.mprofile', filter="Все"))
 
 
-@manage.route("/bind_stop/<int:order_id>/to/<int:stop_id>")
+@manage.route("/bind_stop/<int:order_id>/to/<int:stop_id>/<string:t>")
 @login_required
-def bind_stop(order_id, stop_id):
+def bind_stop(order_id, stop_id,t):
     order = Order.query.filter_by(id=int(order_id)).first()
     order.add_stop(Stop.query.filter_by(id=int(stop_id)).first())
     db.session.commit()
     flash("Остановка успешно закреплена!")
-    return redirect(url_for('manage.detailed_order', id=order.id))
+    if t=="d":
+        return redirect(url_for("manage.day_details", id=order.id))
+    else:
+        return redirect(url_for("manage.mprofile",filter="Все"))
 
 
 @manage.route("/add_stop", methods=['GET', 'POST'])
@@ -139,27 +143,26 @@ def bind_stop(order_id, stop_id):
 def add_stop():
     form = AddStopForm()
     if form.validate_on_submit():
+        if Stop.query.filter_by(name=form.name.data).first():
+            flash("Такая остановка уже есть!")
+            return redirect(url_for("manage.add_stop"))
         s = Stop(name=form.name.data)
         db.session.add(s)
         db.session.commit()
         flash("Остановка успешно добавлена!")
     return render_template('manage/add_stop.html', form=form)
 
-
-@manage.route("/details/order/<int:id>", methods=['GET', 'POST'])
-def detailed_order(id):
-    order = Order.query.filter_by(id=int(id)).first()
-    return render_template('manage/order_detailed.html', order=order, stops=Stop.query.all())
-
-
-@manage.route("/remove_stop/<int:stop_id>/<int:order_id>", methods=['GET', 'POST'])
+@manage.route("/remove_stop/<int:stop_id>/<int:order_id>/<string:t>", methods=['GET', 'POST'])
 @login_required
-def remove_stop(stop_id, order_id):
+def remove_stop(stop_id, order_id,t):
     order = Order.query.filter_by(id=int(order_id)).first()
     order.remove_stop(Stop.query.filter_by(id=int(stop_id)).first())
     db.session.commit()
     flash("Остановка успешно удалена")
-    return redirect(url_for("manage.detailed_order", id=order.id))
+    if t=="d":
+        return redirect(url_for("manage.day_details", id=order.id))
+    else:
+        return redirect(url_for("manage.mprofile",filter="Все"))
 
 
 @manage.route("/create_report", methods=['GET', 'POST'])
@@ -187,4 +190,4 @@ def create_report():
 def day_details(id):
     day = Day.query.filter_by(id=int(id)).first()
     orders = Order.query.filter_by(date=day.date).all()
-    return render_template("manage/day_details.html", title='День', day=day, orders=orders)
+    return render_template("manage/day_details.html", title='День', day=day, orders=orders, stops=Stop.query.all())

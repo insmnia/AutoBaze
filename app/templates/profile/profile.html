@@ -29,22 +29,48 @@
                         <h5 class="card-title">Заявка от {{ order.date|date }}</h5>
                         <h6 class="card-subtitle mb-2 text-muted">{{ order.FCs }}</h6>
                         <h6 class="card-subtitle mb-2 text-muted">{{ order.email }}</h6>
-                        <div class="btn-group dropend">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2"
-                                data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
+                            data-bs-target="#OrderInfo{{order.id}}" aria-controls="offcanvasExample">
+                            Подробнее
+                        </button>
+                    </div>
+
+                </div>
+                <div class="offcanvas offcanvas-start" tabindex="-1" id="OrderInfo{{order.id}}"
+                    aria-labelledby="offcanvasExampleLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasExampleLabel">Заявка от {{ order.date|date }}</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                            aria-label="Закрыть"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.FCs }}</b></h6>
+                            <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.email }}</b></h6>
+                            <p class="card-text">
+                                Пункт отправления: <b>{{ order.departure_point }}</b><br>
+                                Пункт прибытия: <b>{{ order.arrival_point }}</b><br>
+                                Тип доставки: <b>{{ order.order_type }}</b><br>
+                                {% if order.order_type == "Пассажирская" %}
+                                Количество пассажиров: <b>{{ order.amount}}</b><br>
+                                {% else %}
+                                Транспорт для доставки: <b>{{ order.auto}}</b><br>
+                                {% endif %}
+                                Остановки: <b>{{order.stops}}</b>
+                            </p>
+                        </div>
+                        <div class="dropdown mt-3">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-bs-toggle="dropdown">
                                 Действия
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                <li>
-                                    <button class="btn btn-outline-primary" type="button"style="color:black">
-                                        <a href="{{ url_for('manage.detailed_order',id=order.id) }}" class="card-link"
-                                            style="text-decoration: none;color:black">Подробнее</a>
-                                    </button>
-                                </li>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <li>
                                     <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
-                                        <a href="{{ url_for('profile.delete_uorder',id=order.id) }}" class="card-link"
-                                            style="text-decoration: none;color:black">Удалить</a>
+                                        <a class="dropdown-item"
+                                            href="{{ url_for('profile.delete_uorder',id=order.id) }}">
+                                            Удалить
+                                        </a>
                                     </button>
                                 </li>
                             </ul>

@@ -2,7 +2,7 @@
 
 {% block content%}
 <h5>День - {{day.date|date}}</h5>
-<h5>Количество заявок: {{ day.orders_amount }}</h5>
+<h5>Количество заявок: 20-{{ day.orders_amount }}</h5>
 <div class="container">
     <div class="row">
         {% for order in orders %}
@@ -21,6 +21,7 @@
                 {% endif %}
                 Остановки: {{order.stops}}
             </p>
+
             <div class="btn-group dropend">
                 <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
                     aria-expanded="false">
@@ -28,7 +29,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     {% for stop in stops %}
-                    <li><a href="{{ url_for('manage.bind_stop',stop_id=stop.id,order_id=order.id) }}">{{
+                    <li><a href="{{ url_for('manage.bind_stop',stop_id=stop.id,order_id=order.id,t='d') }}">{{
                             stop.name }}</a>
                     </li>
                     {% endfor %}
@@ -43,7 +44,7 @@
                 </button>
                 <ul class="dropdown-menu">
                     {% for stop in order.stops %}
-                    <li><a href="{{ url_for('manage.remove_stop',stop_id=stop.id,order_id=order.id) }}">{{
+                    <li><a href="{{ url_for('manage.remove_stop',stop_id=stop.id,order_id=order.id,t='d') }}">{{
                             stop.name }}</a>
                     </li>
                     {% endfor %}
