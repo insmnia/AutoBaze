@@ -96,7 +96,7 @@
 
                 </div>
                 <div class="offcanvas offcanvas-start" tabindex="-1" id="OrderInfo{{order.id}}"
-                    aria-labelledby="offcanvasExampleLabel">
+                    aria-labelledby="offcanvasExampleLabel" style="width:250px">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Заявка от {{ order.date|date }}</h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
@@ -117,32 +117,33 @@
                             Остановки: <b>{{order.stops}}</b><br>
                             Статус: <b>{{order.state}}</b>
                         </p>
-                        <div class="btn-group dropend">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-bs-toggle="dropdown" aria-expanded="false" style="display: block">
                                 Управление
-                            </button>
-                            <ul class="dropdown-menu">
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <li>
                                     <button type="button" class="btn btn-outline-success" id="liveToastBtn">
-                                        <a class="dropdown-item"
-                                            href="{{ url_for('manage.accept_order',id=order.id) }}">
+                                        <a class="" href="{{ url_for('manage.accept_order',id=order.id) }}"
+                                            style="text-decoration:0">
                                             Принять
                                         </a>
                                     </button>
                                 </li>
                                 <li>
                                     <button type="button" class="btn btn-outline-warning" id="liveToastBtn">
-                                        <a class="dropdown-item"
-                                            href="{{ url_for('manage.decline_order',id=order.id) }}">
+                                        <a class="" href="{{ url_for('manage.decline_order',id=order.id) }}"
+                                            style="text-decoration:0">
                                             Отклонить
                                         </a>
                                     </button>
                                 </li>
                                 <li>
                                     <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
-                                        <a class="dropdown-item"
-                                            href="{{ url_for('manage.delete_order',id=order.id) }}">
+                                        <a class="" href="{{ url_for('manage.delete_order',id=order.id) }}"
+                                            style="text-decoration:0">
                                             Удалить
                                         </a>
                                     </button>
@@ -150,12 +151,13 @@
                             </ul>
                         </div>
                         <p>
-                        <div class="btn-group dropend">
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-bs-toggle="dropdown" aria-expanded="false" style="display: block">
                                 Добавить остановку
-                            </button>
-                            <ul class="dropdown-menu">
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 {% for stop in stops %}
                                 <li><a href="{{ url_for('manage.bind_stop',stop_id=stop.id,order_id=order.id,t='p') }}">{{
                                         stop.name }}</a>
@@ -165,13 +167,13 @@
                         </div>
                         </p>
                         <p>
-                        <div class="btn-group dropend">
                             {% if order.stops %}
-                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-bs-toggle="dropdown" aria-expanded="false" style="display: block">
                                 Удалить остановку
-                            </button>
-                            <ul class="dropdown-menu">
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 {% for stop in order.stops %}
                                 <li><a
                                         href="{{ url_for('manage.remove_stop',stop_id=stop.id,order_id=order.id,t='p') }}">{{
@@ -179,8 +181,8 @@
                                 </li>
                                 {% endfor %}
                             </ul>
-                            {% endif %}
                         </div>
+                        {% endif %}
                         </p>
                     </div>
                 </div>
