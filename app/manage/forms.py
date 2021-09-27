@@ -9,7 +9,7 @@ class AddManagerForm(FlaskForm):
                            validators=[DataRequired()])
     submit = SubmitField("Добавить")
 
-    def validate_manager(self,username):
+    def validate_manager(self, username):
         if User.query.filter_by(username=username.data).first().manager:
             raise ValidationError("Такой менеджер уже есть!")
 
@@ -19,6 +19,6 @@ class AddStopForm(FlaskForm):
                        validators=[DataRequired()])
     submit = SubmitField("Добавить")
 
-    def validate_stop(self,name):
+    def validate_stop(self, name):
         if Stop.query.filter_by(name=name.data).first():
             raise ValidationError("Такая остановка уже есть!")

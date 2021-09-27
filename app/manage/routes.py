@@ -127,15 +127,15 @@ def delete_day(id):
 
 @manage.route("/bind_stop/<int:order_id>/to/<int:stop_id>/<string:t>")
 @login_required
-def bind_stop(order_id, stop_id,t):
+def bind_stop(order_id, stop_id, t):
     order = Order.query.filter_by(id=int(order_id)).first()
     order.add_stop(Stop.query.filter_by(id=int(stop_id)).first())
     db.session.commit()
     flash("Остановка успешно закреплена!")
-    if t=="d":
+    if t == "d":
         return redirect(url_for("manage.day_details", id=order.id))
     else:
-        return redirect(url_for("manage.mprofile",filter="Все"))
+        return redirect(url_for("manage.mprofile", filter="Все"))
 
 
 @manage.route("/add_stop", methods=['GET', 'POST'])
@@ -152,17 +152,18 @@ def add_stop():
         flash("Остановка успешно добавлена!")
     return render_template('manage/add_stop.html', form=form)
 
+
 @manage.route("/remove_stop/<int:stop_id>/<int:order_id>/<string:t>", methods=['GET', 'POST'])
 @login_required
-def remove_stop(stop_id, order_id,t):
+def remove_stop(stop_id, order_id, t):
     order = Order.query.filter_by(id=int(order_id)).first()
     order.remove_stop(Stop.query.filter_by(id=int(stop_id)).first())
     db.session.commit()
     flash("Остановка успешно удалена")
-    if t=="d":
+    if t == "d":
         return redirect(url_for("manage.day_details", id=order.id))
     else:
-        return redirect(url_for("manage.mprofile",filter="Все"))
+        return redirect(url_for("manage.mprofile", filter="Все"))
 
 
 @manage.route("/create_report", methods=['GET', 'POST'])
@@ -174,15 +175,24 @@ def create_report():
             return redirect(url_for("manage.create_report"))
         orders = Order.query.filter(
             Order.date.between(request.form.get("date_from"), request.form.get("date_to"))).all()
-        print(orders)
         import csv
-        with open(f"reports/report-{str(datetime.datetime.now().date())}.csv", 'w') as f:
+        # with open(f"report.txt", 'w') as f:
+        #     for order in orders:
+        #         f.write(str(order)+'\n')
+        passenger_value = 0
+        good_value = 0
+        with open(f"report-1.csv", 'w') as f:
             writer = csv.writer(f)
             for order in orders:
-                writer.writerow(str(order))
-
+                if order.order_type == "Пассажирская":
+                    passenger_value += 20
+                else:
+                    good_value += 40
+                writer.writerow(str(order).split(','))
+            writer.writerow(["Пассажарские перевозки",passenger_value])
+            writer.writerow(["Грузоперевозки",good_value])
         return redirect(url_for('manage.create_report'))
-    return render_template("manage/create_report.html", title='Отчёт', today=str(datetime.datetime.now().date()))
+    return render_template("manage/create_report.html", title='Отчёт', today=str(datetime.datetime.now()).split()[0])
 
 
 @manage.route("/day_details/<int:id>", methods=['GET', 'POST'])
@@ -191,3 +201,41 @@ def day_details(id):
     day = Day.query.filter_by(id=int(id)).first()
     orders = Order.query.filter_by(date=day.date).all()
     return render_template("manage/day_details.html", title='День', day=day, orders=orders, stops=Stop.query.all())
+
+
+@manage.route("/delete_manager", methods=["GET", "POST"])
+@login_required
+def delete_manager():
+    form = AddManagerForm()
+    if form.validate_on_submit():
+        if not current_user.manager:
+            flash("Недостаточно прав")
+            return redirect(url_for('main.index'))
+        manager = User.query.filter_by(username=form.username.data).first()
+        if manager is None or not manager.manager:
+            flash("Нет такого менеджера!")
+            return redirect(url_for('manage.delete_manager'))
+        manager.manager = 0
+        db.session.commit()
+        flash("Менеджер удален!")
+        return redirect(url_for('manage.mprofile', filter="Все"))
+    return render_template('manage/delete_manager.html', form=form, title="Управление")
+
+
+@manage.route("/delete_stop", methods=['GET', 'POST'])
+@login_required
+def delete_stop():
+    form = AddStopForm()
+    if form.validate_on_submit():
+        if not current_user.manager:
+            flash("Недостаточно прав")
+            return redirect(url_for('main.index'))
+        s = Stop.query.filter_by(name=form.name.data).first()
+        if not s:
+            flash("Нет такой остановки!")
+            return redirect(url_for("manage.delete_stop"))
+        db.session.delete(s)
+        db.session.commit()
+        flash("Остановка успешно удалена!")
+        return redirect(url_for('manage.mprofile', filter="Все"))
+    return render_template('manage/delete_stop.html', form=form)
