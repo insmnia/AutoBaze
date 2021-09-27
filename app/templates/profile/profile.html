@@ -1,87 +1,80 @@
 {% extends "base.html" %}
 {% block content %}
+<style>
+    #btn {
+        display: block;
+        width: 100%;
+    }
+</style>
 <div class="container">
     <div class="row">
-        <!-- Профиль пользователя -->
-        <div class="col">
-            <div class="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">{{ user.username }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
-                    <p class="card-text">
-                        <button type="button" class="btn btn-primary"><a
-                                href="{{ url_for('profile.change_master_password') }}"
-                                style="text-decoration: none; color:white">Сменить пароль</a></button>
-                    </p>
-                    <p class="card-text">
-                        <button type="button" class="btn btn-primary"><a href="{{ url_for('profile.change_email') }}"
-                                style="text-decoration: none; color:white">Сменить почту</a></button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <!-- Заявки пользователя -->
-        <div class="col">
-            <div class="row">
+        <div class="col-sm-8" style="width:50%;margin-right:15%;margin-top:2%;">
+            <div class="row"
+                style="background:black;color:white;display:flex;align-items:center;border-radius: 5px;">
                 {% for order in user.orders %}
-                <div class="card" style="width: 20rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Заявка от {{ order.date|date }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ order.FCs }}</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ order.email }}</h6>
-                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-                            data-bs-target="#OrderInfo{{order.id}}" aria-controls="offcanvasExample">
-                            Подробнее
-                        </button>
-                    </div>
-
+                <p>
+                <div class="col-sm" style="text-align:center; width: 100%;">{{order.date|date}}</div>
+                <div class="col-sm" style="text-align:center;">{{order.email}}</div>
+                <div class="col-sm">
+                    <button class="btn btn-outline-info" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#OrderInfo{{order.id}}" aria-controls="offcanvasExample" style="width: 100%;">
+                        Подробнее
+                    </button>
                 </div>
+                </p>
+                <!-- Вне холста -->
                 <div class="offcanvas offcanvas-start" tabindex="-1" id="OrderInfo{{order.id}}"
-                    aria-labelledby="offcanvasExampleLabel">
+                    aria-labelledby="offcanvasExampleLabel" style="width:250px">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Заявка от {{ order.date|date }}</h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                             aria-label="Закрыть"></button>
                     </div>
-                    <div class="offcanvas-body">
-                        <div>
-                            <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.FCs }}</b></h6>
-                            <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.email }}</b></h6>
-                            <p class="card-text">
-                                Пункт отправления: <b>{{ order.departure_point }}</b><br>
-                                Пункт прибытия: <b>{{ order.arrival_point }}</b><br>
-                                Тип доставки: <b>{{ order.order_type }}</b><br>
-                                {% if order.order_type == "Пассажирская" %}
-                                Количество пассажиров: <b>{{ order.amount}}</b><br>
-                                {% else %}
-                                Транспорт для доставки: <b>{{ order.auto}}</b><br>
-                                {% endif %}
-                                Остановки: <b>{{order.stops}}</b>
-                            </p>
-                        </div>
-                        <div class="dropdown mt-3">
-                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-bs-toggle="dropdown">
-                                Действия
-                            </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                <li>
-                                    <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
-                                        <a class="dropdown-item"
-                                            href="{{ url_for('profile.delete_uorder',id=order.id) }}">
-                                            Удалить
-                                        </a>
-                                    </button>
-                                </li>
-                            </ul>
-                        </div>
+                    <div class="offcanvas-body" style="color:black">
+                        <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.FCs }}</b></h6>
+                        <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.email }}</b></h6>
+                        <p class="card-text">
+                            Пункт отправления: <b>{{ order.departure_point }}</b><br>
+                            Пункт прибытия: <b>{{ order.arrival_point }}</b><br>
+                            Тип доставки: <b>{{ order.order_type }}</b><br>
+                            {% if order.order_type == "Пассажирская" %}
+                            Количество пассажиров: <b>{{ order.amount}}</b><br>
+                            {% else %}
+                            Транспорт для доставки: <b>{{ order.auto}}</b><br>
+                            {% endif %}
+                            Остановки: <b>{{order.stops}}</b><br>
+                            Статус: <b>{{order.state}}</b>
+                        </p>
+                        <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
+                            <a class="" href="{{ url_for('profile.delete_uorder',id=order.id) }}"
+                                style="text-decoration:none">
+                                Удалить
+                            </a>
+                        </button>
                     </div>
                 </div>
+                <!-- Вне холста -->
                 {% endfor %}
             </div>
         </div>
+        <div class="col-sm-4">
+            <div class="card" style="width: 18rem;margin-top:6%">
+                <div class="card-body">
+                    <h5 class="card-title">Пользователь - {{ user.username }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('profile.change_master_password') }}"
+                                style="text-decoration: none; color:white">Сменить пароль</a></button>
+                    </p>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('profile.change_email') }}"
+                                style="text-decoration: none; color:white">Сменить почту</a></button>
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
-
-</div>
 </div>
 {% endblock %}

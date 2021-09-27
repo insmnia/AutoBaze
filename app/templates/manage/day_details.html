@@ -3,6 +3,8 @@
 {% block content%}
 <h5>День - {{day.date|date}}</h5>
 <h5>Количество заявок: 20-{{ day.orders_amount }}</h5>
+<a href="{{ url_for('manage.delete_day',id=day.id) }}">Удалить</a>
+
 <div class="container">
     <div class="row">
         {% for order in orders %}
@@ -52,6 +54,7 @@
                 {% endif %}
             </div>
             </p>
+            <hr>
             {% endfor %}
         </div>
 

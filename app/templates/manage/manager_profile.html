@@ -1,108 +1,36 @@
 {% extends "base.html" %}
 {% block content %}
 <style>
+    #btn {
+        display: block;
+        width: 100%;
+    }
 </style>
 <div class="container">
     <div class="row">
-        <!-- Профиль менеджера -->
-        <div class="col">
-            <div class="card" id="card" style="width: 18rem;">
-                <div class="card-body">
-                    <h4 class="card-title">{{ user.username }}</h4>
-                    <h5 class="card-title">{{ "Менеджер" }}</h5>
-                    <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
-                    <p class="card-text">
-                        <button type="button" class="btn btn-primary" id="btn"><a
-                                href="{{ url_for('manage.change_master_password') }}"
-                                style="text-decoration: none; color:white">Сменить пароль</a></button>
-                    </p>
-                    <p class="card-text">
-                        <button type="button" class="btn btn-primary" id="btn"><a
-                                href="{{ url_for('manage.change_email') }}"
-                                style="text-decoration: none; color:white">Сменить почту</a></button>
-                    </p>
-                    <p class="card-text">
-                        <button type="button" class="btn btn-primary" id="btn"><a
-                                href="{{ url_for('manage.add_manager') }}"
-                                style="text-decoration: none; color:white">Добавить менеджера</a></button>
-                    </p>
-                    <p class="card-text">
-                        <button type="button" class="btn btn-primary" id="btn"><a
-                                href="{{ url_for('manage.add_stop') }}"
-                                style="text-decoration: none; color:white">Добавить остановку</a></button>
-                    </p>
-                    <p class="card-text">
-                        <button type="button" class="btn btn-primary" id="btn"><a
-                                href="{{ url_for('manage.create_report') }}"
-                                style="text-decoration: none; color:white">Составить отчёт</a></button>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            {% for day in days %}
-            <div class="card" id="card" style="width: 15rem">
-                <h5 class="card-title">День {{ day.date }}</h5>
-                <h6 class="card-title">Количество заявок: {{ 20-day.orders_amount }}</h6>
-                <p class="card-text">
-                    <a href="{{ url_for('manage.day_details',id=day.id) }}">Подробнее</a>
-                </p>
-                <p class="card-text">
-                    <a href="{{ url_for('manage.delete_day',id=day.id) }}">Удалить</a>
-                </p>
-            </div>
-            {% endfor %}
-        </div>
-        <!-- Заявки пользователя -->
-        <div class="col">
-            <div class="btn-group dropend">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    Статус
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a href="{{ url_for('manage.mprofile',filter='В обработке') }}">В обработке</a></li>
-                    <li><a href="{{ url_for('manage.mprofile',filter='Одобрено') }}">Одобрено</a></li>
-                    <li><a href="{{ url_for('manage.mprofile',filter='Отклонено') }}">Отклонено</a></li>
-                    <li><a href="{{ url_for('manage.mprofile',filter='Все') }}">Сбросить<a></li>
-                </ul>
-            </div>
-            <!-- <div>
-                <div class="btn-group dropend">
-                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        Тип
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li><a href="{{ url_for('manage.mprofile',filter='Грузоперевозка') }}">Грузоперевозка</a>
-                        </li>
-                        <li><a href="{{ url_for('manage.mprofile',filter='Пассажирская') }}">Пассажирская</a>
-                        </li>
-                    </ul>
-                </div>
-            </div> -->
-            <div class="row">
+        <div class="col-sm-8" style="width:50%;margin-right:15%;margin-top:2%;">
+            <div class="row"
+                style="background:black;color:white;display:flex;align-items:center;border-radius: 5px;">
                 {% for order in orders %}
-                <div class="card" style="width: 20rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">Заявка от {{ order.date|date }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ order.FCs }}</h6>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ order.email }}</h6>
-                        <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
-                            data-bs-target="#OrderInfo{{order.id}}" aria-controls="offcanvasExample">
-                            Подробнее
-                        </button>
-                    </div>
-
+                <p>
+                <div class="col-sm" style="text-align:center; width: 100%;">{{order.date|date}}</div>
+                <div class="col-sm" style="text-align:center;">{{order.email}}</div>
+                <div class="col-sm">
+                    <button class="btn btn-outline-info" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#OrderInfo{{order.id}}" aria-controls="offcanvasExample" style="width: 100%;">
+                        Подробнее
+                    </button>
                 </div>
+                </p>
+                <!-- Вне холста -->
                 <div class="offcanvas offcanvas-start" tabindex="-1" id="OrderInfo{{order.id}}"
-                    aria-labelledby="offcanvasExampleLabel" style="width:250px">
+                    aria-labelledby="offcanvasExampleLabel" style="width:280px">
                     <div class="offcanvas-header">
                         <h5 class="offcanvas-title" id="offcanvasExampleLabel">Заявка от {{ order.date|date }}</h5>
                         <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
                             aria-label="Закрыть"></button>
                     </div>
-                    <div class="offcanvas-body">
+                    <div class="offcanvas-body" style="color:black">
                         <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.FCs }}</b></h6>
                         <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.email }}</b></h6>
                         <p class="card-text">
@@ -114,7 +42,7 @@
                             {% else %}
                             Транспорт для доставки: <b>{{ order.auto}}</b><br>
                             {% endif %}
-                            Остановки: <b>{{order.stops}}</b><br>
+                            Остановки:<b>{{order.stops}}</b><br>
                             Статус: <b>{{order.state}}</b>
                         </p>
                         <div class="dropdown">
@@ -127,7 +55,7 @@
                                 <li>
                                     <button type="button" class="btn btn-outline-success" id="liveToastBtn">
                                         <a class="" href="{{ url_for('manage.accept_order',id=order.id) }}"
-                                            style="text-decoration:0">
+                                            style="text-decoration:0;width: 100%;display: block;">
                                             Принять
                                         </a>
                                     </button>
@@ -135,7 +63,7 @@
                                 <li>
                                     <button type="button" class="btn btn-outline-warning" id="liveToastBtn">
                                         <a class="" href="{{ url_for('manage.decline_order',id=order.id) }}"
-                                            style="text-decoration:0">
+                                            style="text-decoration:0;width: 100%;display: block;">
                                             Отклонить
                                         </a>
                                     </button>
@@ -143,7 +71,7 @@
                                 <li>
                                     <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
                                         <a class="" href="{{ url_for('manage.delete_order',id=order.id) }}"
-                                            style="text-decoration:0">
+                                            style="text-decoration:0;width: 100%;display: block;">
                                             Удалить
                                         </a>
                                     </button>
@@ -186,7 +114,79 @@
                         </p>
                     </div>
                 </div>
+                <!-- Вне холста -->
                 {% endfor %}
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="card" style="width: 18rem;margin-top:6%">
+                <div class="card-body">
+                    <h5 class="card-title">Менеджер - {{ user.username }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('manage.change_master_password') }}"
+                                style="text-decoration: none; color:white">Сменить пароль</a></button>
+                    </p>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('manage.change_email') }}"
+                                style="text-decoration: none; color:white">Сменить почту</a></button>
+                    </p>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('manage.add_manager') }}"
+                                style="text-decoration: none; color:white">Добавить менеджера</a></button>
+                    </p>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('manage.add_stop') }}"
+                                style="text-decoration: none; color:white">Добавить остановку</a></button>
+                    </p>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('manage.delete_manager') }}"
+                                style="text-decoration: none; color:white">Удалить менеджера</a></button>
+                    </p>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('manage.delete_stop') }}"
+                                style="text-decoration: none; color:white">Удалить остановку</a></button>
+                    </p>
+                    <p class="card-text">
+                        <button type="button" class="btn btn-primary" id="btn"><a
+                                href="{{ url_for('manage.create_report') }}"
+                                style="text-decoration: none; color:white">Составить отчёт</a></button>
+                    </p>
+                </div>
+            </div>
+            <!-- День -->
+            <p class="card-text">
+            <div class="dropdown dropright">
+                <a class="btn btn-secondary dropdown-toggle" href="#" style="width: 50%;" role="button"
+                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Посмотреть день
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    {% for day in days %}
+                    <a class="dropdown-item" href="{{url_for('manage.day_details',id=day.id)}}">{{day.date|date}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            </p>
+            <!-- День -->
+            <!-- Статус -->
+            <div class="dropdown dropright">
+                <a class="btn btn-secondary dropdown-toggle" href="#" style="width: 50%;" role="button"
+                    id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Фильтр по статусу
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='В обработке') }}">В обработке</a>
+                    <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='Одобрено') }}">Одобрено</a>
+                    <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='Отклонено') }}">Отклонено</a>
+                    <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='Все') }}">Сбросить<a></a>
+                </div>
             </div>
         </div>
     </div>
