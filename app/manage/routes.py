@@ -181,7 +181,7 @@ def create_report():
         #         f.write(str(order)+'\n')
         passenger_value = 0
         good_value = 0
-        with open(f"report-1.csv", 'w') as f:
+        with open(f"report {request.form.get('date_from')}-{request.form.get('date_to')}.csv", 'w') as f:
             writer = csv.writer(f)
             for order in orders:
                 if order.order_type == "Пассажирская":
