@@ -169,6 +169,7 @@ def remove_stop(stop_id, order_id, t):
 @manage.route("/create_report", methods=['GET', 'POST'])
 @login_required
 def create_report():
+    # TODO автоскачивание
     if request.method == "POST":
         if not request.form.get("date_from") and not request.form.get("date_to"):
             flash("Заполните форму!")
