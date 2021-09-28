@@ -20,7 +20,6 @@ def index():
         auto = request.form.get("auto")
         if request.form.get("ta")=="2":
             amount = 20
-        print([Fcs, phone, email, departure_point, arrival_point, amount, auto])
         if not all([Fcs, phone, email, departure_point, arrival_point, amount, auto]):
             flash("Заполните форму полностью!")
             return redirect(url_for('main.index'))

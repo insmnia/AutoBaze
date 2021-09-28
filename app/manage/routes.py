@@ -61,7 +61,6 @@ def change_email():
 def add_manager():
     form = AddManagerForm()
     if form.validate_on_submit():
-        print(current_user)
         if not current_user.manager:
             flash("Недостаточно прав")
             return redirect(url_for('manage.mprofile', filter="Все"))
@@ -126,10 +125,11 @@ def delete_day(id):
 def bind_stop(order_id, stop_id, t):
     order = Order.query.filter_by(id=int(order_id)).first()
     order.add_stop(Stop.query.filter_by(id=int(stop_id)).first())
+    d = Day.query.filter_by(date=order.date).first()
     db.session.commit()
     flash("Остановка успешно закреплена!")
     if t == "d":
-        return redirect(url_for("manage.day_details", id=order.id))
+        return redirect(url_for("manage.day_details", id=d.id))
     else:
         return redirect(url_for("manage.mprofile", filter="Все"))
 
@@ -154,10 +154,12 @@ def add_stop():
 def remove_stop(stop_id, order_id, t):
     order = Order.query.filter_by(id=int(order_id)).first()
     order.remove_stop(Stop.query.filter_by(id=int(stop_id)).first())
+    d = Day.query.filter_by(date=order.date).first()
+
     db.session.commit()
     flash("Остановка успешно удалена")
     if t == "d":
-        return redirect(url_for("manage.day_details", id=order.id))
+        return redirect(url_for("manage.day_details", id=d.id))
     else:
         return redirect(url_for("manage.mprofile", filter="Все"))
 
@@ -165,7 +167,6 @@ def remove_stop(stop_id, order_id, t):
 @manage.route("/create_report", methods=['GET', 'POST'])
 @login_required
 def create_report():
-    # TODO автоскачивание
     if request.method == "POST":
         if not request.form.get("date_from") and not request.form.get("date_to"):
             flash("Заполните форму!")
@@ -190,7 +191,6 @@ def create_report():
             writer.writerow(["Грузоперевозки",good_value])
         sleep(1)
         return send_file(f"reports\\report{request.form.get('date_from')}-{request.form.get('date_to')}.csv",as_attachment=True)
-        # return redirect(url_for('manage.create_report'))
     return render_template("manage/create_report.html", title='Отчёт', today=str(datetime.datetime.now()).split()[0])
 
 
