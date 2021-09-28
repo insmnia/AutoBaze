@@ -1,64 +1,83 @@
 {% extends "base.html"%}
 
 {% block content%}
-<h5>День - {{day.date|date}}</h5>
-<h5>Количество заявок: 20-{{ day.orders_amount }}</h5>
-<a href="{{ url_for('manage.delete_day',id=day.id) }}">Удалить</a>
+<h3>День - {{day.date|date}}</h3>
+<h4>Количество заявок: {{20- day.orders_amount }}</h4>
+<button type="button" class="btn btn-outline-danger">
+    <a href="{{ url_for('manage.delete_day',id=day.id) }}" style="text-decoration: none;">Удалить</a>
+</button>
 
 <div class="container">
     <div class="row">
         {% for order in orders %}
-        <div class="col" style="background-color: blanchedalmond;">
-            <h5 class="card-title">{{ order.date|date }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{ order.FCs }}</h6>
-            <h6 class="card-subtitle mb-2 text-muted">{{ order.email }}</h6>
-            <p class="card-text">
-                Пункт отправления: {{ order.departure_point }}<br>
-                Пункт прибытия: {{ order.arrival_point }}<br>
-                Тип доставки: {{ order.order_type }}<br>
-                {% if order.order_type == "Пассажирская" %}
-                Количество пассажиров: {{ order.amount}}<br>
-                {% else %}
-                Вес груза: {{ order.amount}}<br>
-                {% endif %}
-                Остановки: {{order.stops}}
-            </p>
+        <div class="card mb-3" style="width: 360px;">
+            <div class="row no-gutters">
+                <!-- <div class="col-md-4">
+                    {% if order.order_type == "Пассажирская" %}
+                    <img src="../manage/images/пассажироперевозка.png" class="card-img" alt="...">
+                    {% else %}
+                    <img src="../manage/images/грузоперевозка.png" class="card-img" alt="...">
+                    {% endif %}
+                </div> -->
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title"><b>{{ order.date|date }}</b></h5>
+                        <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.FCs }}</b></h6>
+                        <h6 class="card-subtitle mb-2 text-muted"><b>{{ order.email }}</b></h6>
+                        <p class="card-text">
+                            Пункт отправления: <b>{{ order.departure_point }}</b><br>
+                            Пункт прибытия: <b>{{ order.arrival_point }}</b><br>
+                            Тип доставки: <b>{{ order.order_type }}</b><br>
+                            {% if order.order_type == "Пассажирская" %}
+                            Количество пассажиров: <b>{{ order.amount}}</b>
+                            {% else %}
+                            Вес груза: <b>{{ order.amount}}</b>
+                            {% endif %}
+                            Остановки: <b>{{order.stops}}</b><br>
+                        </p>
+                        <p class="card-text"><small class="text-muted">Статус: {{order.state}}</small></p>
+                        <p>
+                        <div class="btn-group dropend">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Добавить остановку
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% for stop in stops %}
+                                <li><a href="{{ url_for('manage.bind_stop',stop_id=stop.id,order_id=order.id,t='d') }}">{{
+                                        stop.name }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        </p>
+                        <p>
+                        <div class="btn-group dropend">
+                            {% if order.stops %}
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Удалить остановку
+                            </button>
+                            <ul class="dropdown-menu">
+                                {% for stop in order.stops %}
+                                <li><a
+                                        href="{{ url_for('manage.remove_stop',stop_id=stop.id,order_id=order.id,t='d') }}">{{
+                                        stop.name }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endif %}
+                        </div>
+                        </p>
 
-            <div class="btn-group dropend">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    Добавить остановку
-                </button>
-                <ul class="dropdown-menu">
-                    {% for stop in stops %}
-                    <li><a href="{{ url_for('manage.bind_stop',stop_id=stop.id,order_id=order.id,t='d') }}">{{
-                            stop.name }}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
+                    </div>
+                </div>
             </div>
-            <p>
-            <div class="btn-group dropend">
-                {% if order.stops %}
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                    aria-expanded="false">
-                    Удалить остановку
-                </button>
-                <ul class="dropdown-menu">
-                    {% for stop in order.stops %}
-                    <li><a href="{{ url_for('manage.remove_stop',stop_id=stop.id,order_id=order.id,t='d') }}">{{
-                            stop.name }}</a>
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
-            </div>
-            </p>
-            <hr>
-            {% endfor %}
         </div>
-
+        {% endfor %}
     </div>
+
+</div>
 </div>
 
 {% endblock content%}
