@@ -1,23 +1,19 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import Blueprint, flash, redirect, render_template, request, url_for, send_file
 from app import bcrypt, db
 from app.models import User, Order, Day, Stop
 from app.profile.forms import ChangeEmailForm, ChangePasswordForm
 from app.manage.forms import AddManagerForm, AddStopForm
 from flask_login import current_user, login_required
 import datetime
+from time import sleep
 manage = Blueprint("manage", __name__)
 
 
 @manage.route('/cabinet/<string:filter>', methods=['GET', 'POST'])
 @login_required
 def mprofile(filter):
-    # TODO доработать фильтры
     if filter == "Все":
         orders = Order.query.all()
-    # elif filter == "Пассажирская":
-    #     orders = Order.query.filter_by(order_type="Пассажирская")
-    # elif filter == "Грузоперевозка":
-    #     orders = Order.query.filter_by(order_type="Грузоперевозка")
     else:
         orders = Order.query.filter_by(state=filter).all()
     return render_template(
@@ -182,7 +178,7 @@ def create_report():
         #         f.write(str(order)+'\n')
         passenger_value = 0
         good_value = 0
-        with open(f"report {request.form.get('date_from')}-{request.form.get('date_to')}.csv", 'w') as f:
+        with open(f"app\\reports\\report{request.form.get('date_from')}-{request.form.get('date_to')}.csv", 'w') as f:
             writer = csv.writer(f)
             for order in orders:
                 if order.order_type == "Пассажирская":
@@ -192,7 +188,9 @@ def create_report():
                 writer.writerow(str(order).split(','))
             writer.writerow(["Пассажарские перевозки",passenger_value])
             writer.writerow(["Грузоперевозки",good_value])
-        return redirect(url_for('manage.create_report'))
+        sleep(1)
+        return send_file(f"reports\\report{request.form.get('date_from')}-{request.form.get('date_to')}.csv",as_attachment=True)
+        # return redirect(url_for('manage.create_report'))
     return render_template("manage/create_report.html", title='Отчёт', today=str(datetime.datetime.now()).split()[0])
 
 

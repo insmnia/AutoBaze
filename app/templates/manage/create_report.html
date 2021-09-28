@@ -10,7 +10,7 @@
                     <input type="date" name="date_from" class="form-control" max="{{ today }}">
                 </div>
                 <div class="form-group help">
-                    <input type="date" name="date_to" class="form-control" max="{{ today }}">
+                    <input type="date" name="date_to" class="form-control" max="{{ today }}" min="">
                 </div>
                 <div class="form-group help">
                     <button type="submit" class="btn btn-default">Собрать</button>
@@ -19,4 +19,11 @@
         </div>
     </div><!-- /.row -->
 </div><!-- /.container -->
+<script>
+    const calendar1 = document.getElementsByName("date_from")[0]
+    calendar1.addEventListener("change",()=>{
+        const calendar2 = document.getElementsByName("date_to")[0];
+        calendar2.min = calendar1.value;
+    });
+</script>
 {% endblock %}
