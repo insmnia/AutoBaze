@@ -9,14 +9,13 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-8" style="width:50%;margin-right:15%;margin-top:2%;">
-            <div class="row"
-                style="background:black;color:white;display:flex;align-items:center;border-radius: 5px;">
+            <div class="row" style="background:black;color:white;display:flex;align-items:center;border-radius: 5px;">
                 {% for order in orders %}
                 <p>
                 <div class="col-sm" style="text-align:center; width: 100%;">{{order.date|date}}</div>
                 <div class="col-sm" style="text-align:center;">{{order.email}}</div>
                 <div class="col-sm">
-                    <button class="btn btn-outline-info" type="button" data-bs-toggle="offcanvas"
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#OrderInfo{{order.id}}" aria-controls="offcanvasExample" style="width: 100%;">
                         Подробнее
                     </button>
@@ -182,7 +181,8 @@
                     Фильтр по статусу
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='В обработке') }}">В обработке</a>
+                    <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='В обработке') }}">В
+                        обработке</a>
                     <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='Одобрено') }}">Одобрено</a>
                     <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='Отклонено') }}">Отклонено</a>
                     <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='Все') }}">Сбросить<a></a>

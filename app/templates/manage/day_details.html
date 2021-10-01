@@ -7,6 +7,11 @@
     <a href="{{ url_for('manage.delete_day',id=day.id) }}" style="text-decoration: none;">Удалить</a>
 </button>
 
+<style>
+    #btn {
+        width: 100%;
+    }
+</style>
 <div class="container">
     <div class="row">
         {% for order in orders %}
@@ -37,9 +42,44 @@
                         </p>
                         <p class="card-text"><small class="text-muted">Статус: {{order.state}}</small></p>
                         <p>
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-bs-toggle="dropdown" aria-expanded="false" style="width:85%">
+                                Управление
+                            </a>
+
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                <li>
+                                    <button type="button" class="btn btn-outline-success" id="liveToastBtn">
+                                        <a class="" href="{{ url_for('manage.accept_order',id=order.id) }}"
+                                            style="text-decoration:0;width: 100%;display: block;">
+                                            Принять
+                                        </a>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="btn btn-outline-warning" id="liveToastBtn">
+                                        <a class="" href="{{ url_for('manage.decline_order',id=order.id) }}"
+                                            style="text-decoration:0;width: 100%;display: block;">
+                                            Отклонить
+                                        </a>
+                                    </button>
+                                </li>
+                                <li>
+                                    <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
+                                        <a class="" href="{{ url_for('manage.delete_order',id=order.id) }}"
+                                            style="text-decoration:0;width: 100%;display: block;">
+                                            Удалить
+                                        </a>
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                        </p>
+                        <p>
                         <div class="btn-group dropend">
                             <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                                aria-expanded="false" id="btn">
                                 Добавить остановку
                             </button>
                             <ul class="dropdown-menu">
@@ -55,7 +95,7 @@
                         <div class="btn-group dropend">
                             {% if order.stops %}
                             <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-                                aria-expanded="false">
+                                aria-expanded="false" id="btn">
                                 Удалить остановку
                             </button>
                             <ul class="dropdown-menu">

@@ -67,7 +67,7 @@ def add_manager():
         manager = User.query.filter_by(username=form.username.data).first()
         if manager is None:
             flash("Нет такого пользователя!")
-            return redirect(url_for('manage.mprofile', filter="Все"))
+            return redirect(url_for('manage.add_manager'))
         manager.manager = 1
         db.session.commit()
         flash("Менеджер добавлен!")
@@ -187,10 +187,10 @@ def create_report():
                 else:
                     good_value += 40
                 writer.writerow(str(order).split(','))
-            writer.writerow(["Пассажарские перевозки",passenger_value])
-            writer.writerow(["Грузоперевозки",good_value])
+            writer.writerow(["Пассажарские перевозки", passenger_value])
+            writer.writerow(["Грузоперевозки", good_value])
         sleep(1)
-        return send_file(f"reports\\report{request.form.get('date_from')}-{request.form.get('date_to')}.csv",as_attachment=True)
+        return send_file(f"reports\\report{request.form.get('date_from')}-{request.form.get('date_to')}.csv", as_attachment=True)
     return render_template("manage/create_report.html", title='Отчёт', today=str(datetime.datetime.now()).split()[0])
 
 
@@ -205,12 +205,12 @@ def day_details(id):
 @manage.route("/delete_manager", methods=["GET", "POST"])
 @login_required
 def delete_manager():
-    form = AddManagerForm()
-    if form.validate_on_submit():
+    if request.method == "POST":
         if not current_user.manager:
             flash("Недостаточно прав")
             return redirect(url_for('main.index'))
-        manager = User.query.filter_by(username=form.username.data).first()
+        manager = User.query.filter_by(
+            username=request.form.get("manager")).first()
         if manager is None or not manager.manager:
             flash("Нет такого менеджера!")
             return redirect(url_for('manage.delete_manager'))
@@ -218,18 +218,18 @@ def delete_manager():
         db.session.commit()
         flash("Менеджер удален!")
         return redirect(url_for('manage.mprofile', filter="Все"))
-    return render_template('manage/delete_manager.html', form=form, title="Управление")
+    mans = User.query.filter_by(manager=1).all()
+    return render_template('manage/delete_manager.html', title="Управление", managers=mans)
 
 
 @manage.route("/delete_stop", methods=['GET', 'POST'])
 @login_required
 def delete_stop():
-    form = AddStopForm()
-    if form.validate_on_submit():
+    if request.method == 'POST':
         if not current_user.manager:
             flash("Недостаточно прав")
             return redirect(url_for('main.index'))
-        s = Stop.query.filter_by(name=form.name.data).first()
+        s = Stop.query.filter_by(name=request.form.get("stop")).first()
         if not s:
             flash("Нет такой остановки!")
             return redirect(url_for("manage.delete_stop"))
@@ -237,4 +237,4 @@ def delete_stop():
         db.session.commit()
         flash("Остановка успешно удалена!")
         return redirect(url_for('manage.mprofile', filter="Все"))
-    return render_template('manage/delete_stop.html', form=form)
+    return render_template('manage/delete_stop.html', stops=Stop.query.all())

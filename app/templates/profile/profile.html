@@ -9,14 +9,13 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-8" style="width:50%;margin-right:15%;margin-top:2%;">
-            <div class="row"
-                style="background:black;color:white;display:flex;align-items:center;border-radius: 5px;">
+            <div class="row" style="background:black;color:white;display:flex;align-items:center;border-radius: 5px;">
                 {% for order in user.orders %}
                 <p>
                 <div class="col-sm" style="text-align:center; width: 100%;">{{order.date|date}}</div>
                 <div class="col-sm" style="text-align:center;">{{order.email}}</div>
                 <div class="col-sm">
-                    <button class="btn btn-outline-info" type="button" data-bs-toggle="offcanvas"
+                    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas"
                         data-bs-target="#OrderInfo{{order.id}}" aria-controls="offcanvasExample" style="width: 100%;">
                         Подробнее
                     </button>
@@ -43,6 +42,7 @@
                             Транспорт для доставки: <b>{{ order.auto}}</b><br>
                             {% endif %}
                             Остановки: <b>{{order.stops}}</b><br>
+                            <!-- TODO доделать оформление статуса -->
                             Статус: <b>{{order.state}}</b>
                         </p>
                         <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
