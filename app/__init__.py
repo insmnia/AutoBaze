@@ -30,10 +30,12 @@ def create_app():
     from app.main.routes import main
     from app.profile.routes import prof
     from app.manage.routes import manage
+    from app.errors import errors
     app.register_blueprint(auth, prefix="/auth")
     app.register_blueprint(main)
     app.register_blueprint(manage, prefix="/manage")
     app.register_blueprint(prof, prefix="/user")
+    app.register_blueprint(errors)
 
     @app.template_filter('date')
     def datetimeformat(value):  # 2021-09-05 00:15:40.738222
