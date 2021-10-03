@@ -44,8 +44,19 @@
                             {% endif %}
                             Остановки: <b>{{order.stops}}</b><br>
                             <!-- TODO доделать оформление статуса -->
-                            Статус: <b>{{order.state}}</b>
+                        <p>
+                            Статус:
+                            {% if order.state == "Одобрено" %}
+                        
+                            <small style="color: green;">{{order.state}}</small>
+                            {% elif order.state == "В обработке" %}
+                            <small style="color: rgb(206, 209, 41);">{{order.state}}</small>
+                            {% else %}
+                            <small style="color: red;">{{order.state}}</small>
+                            
+                            {% endif %}
                         </p>
+
                         <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
                             <a class="" href="{{ url_for('profile.delete_uorder',id=order.id) }}"
                                 style="text-decoration:none">
@@ -59,7 +70,8 @@
             </div>
             {% else %}
             <h5>Вы не оставляли заявок</h5>
-            <p>Перейдите на <a href="{{url_for('main.index')}}" style="text-decoration:none">главную</a>, чтобы оставить первую!</p>
+            <p>Перейдите на <a href="{{url_for('main.index')}}" style="text-decoration:none">главную</a>, чтобы оставить
+                первую!</p>
             {% endif %}
         </div>
         <div class="col-sm-4">
