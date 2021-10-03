@@ -5,29 +5,36 @@
 <div class="container">
     <div class="row">
         <div class="col-md-offset-3 col-md-6">
-            <form class="form-horizontal" method="POST" action="">
+            <form class="form-horizontal" method="POST" action="" name="FormOrder">
                 <h3>Оставить заявку</h3>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="ФИО" name="FCS">
+                    <input type="text" class="form-control" placeholder="ФИО" name="FCS" onchange="ChangeButtonStatus()"
+                        onkeyup="ChangeButtonStatus()">
                 </div>
                 <div class="form-group help">
-                    <input type="text" class="form-control" placeholder="Номер телефона" name="phone">
+                    <input type="text" class="form-control" placeholder="Номер телефона" name="phone"
+                        onchange="ChangeButtonStatus()" onkeyup="ChangeButtonStatus()">
                 </div>
                 <div class="form-group help">
-                    <input type="text" class="form-control" placeholder="E-mail адрес" name="email">
+                    <input type="text" class="form-control" placeholder="E-mail адрес" name="email"
+                        onchange="ChangeButtonStatus()" onkeyup="ChangeButtonStatus()">
                 </div>
                 <div class="form-group help">
-                    <input type="text" class="form-control" placeholder="Откуда" name="from">
+                    <input type="text" class="form-control" placeholder="Откуда" name="from"
+                        onchange="ChangeButtonStatus()" onkeyup="ChangeButtonStatus()">
                 </div>
                 <div class="form-group help">
-                    <input type="text" class="form-control" placeholder="Куда" name="to">
+                    <input type="text" class="form-control" placeholder="Куда" name="to" onchange="ChangeButtonStatus()"
+                        onkeyup="ChangeButtonStatus()">
                 </div>
                 <div class="form-group help">
                     <input type="date" name="calendar" value="{{ today }}" min="{{ today }}" max="{{ max_day }}"
-                        class="form-control" placeholder="Пароль">
+                        class="form-control" placeholder="Пароль" onchange="ChangeButtonStatus()"
+                        onkeyup="ChangeButtonStatus()">
                 </div>
                 <div class="form-group help">
-                    <select name="ta" id="ta" class="selectpicker form-control">
+                    <select name="ta" id="ta" class="selectpicker form-control" onchange="ChangeButtonStatus()"
+                        onkeyup="ChangeButtonStatus()">
                         <option value="1" class="option-selected">Пасcажирская (20р)</option>
                         <option value="2" class="option-selected">Грузоперевозка (40р)</option>
                     </select>
@@ -35,17 +42,19 @@
                 <div class="row">
                     <div class="col-sm form-group help">
                         <input type="text" class="form-control" name="amount" id="amount"
-                            placeholder="Кол-во пассажиров">
+                            placeholder="Кол-во пассажиров" onchange="ChangeButtonStatus()"
+                            onkeyup="ChangeButtonStatus()">
                     </div>
                     <div class="col-sm form-group help">
-                        <select class="selectpicker form-control" name="auto" id="auto" style="visibility: hidden;">
+                        <select class="selectpicker form-control" name="auto" id="auto" style="visibility: hidden;"
+                            onchange="ChangeButtonStatus()" onkeyup="ChangeButtonStatus()">
                             <option value="Микроавтобус" class="option-selected">Микроавтобус</option>
                             <option value="Грузовик" class="option-selected">Грузовик</option>
                             <option value="Фура" class="option-selected">Фура</option>
                         </select>
                     </div>
                     <div class="form-group help">
-                        <button type="submit" class="btn btn-default">Заказать</button>
+                        <button type="submit" class="btn btn-default" name="SendButton">Заказать</button>
                     </div>
                 </div>
             </form>
@@ -64,5 +73,16 @@
             document.getElementById("auto").style.visibility = 'visible';
         }
     });
+    form = document.FormOrder;
+    function ChangeButtonStatus() {
+        let default_fields = (form.name.value != "" && form.email.value != "" &&
+            form.phone.value != "" && form.from.value != "" && form.to.value != ""
+        )
+        let auto_or_amount = form.auto.value!="" && form.amount.value!="";
+        form.SendButton.disabled = !default_fields && auto;
+
+    }
+    ChangeButtonStatus()
+    //
 </script>
 {% endblock %}
