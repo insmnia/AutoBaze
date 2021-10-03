@@ -71,3 +71,7 @@ def index():
                            today=today,
                            max_day=max_day,
                            )
+
+@main.route("/about")
+def about():
+    return render_template("main/about.html")

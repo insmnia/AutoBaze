@@ -52,7 +52,7 @@
                 <div class="navbar-nav">
                     <a class="nav-link active" href="{{ url_for('main.index') }}">Главная</a>
                     <a class="nav-link" target="_blank"
-                        href="https://docs.google.com/presentation/d/1NLE0ki3XzEj3-x1TpYYwyrycPuab7_tD/edit#slide=id.p1">О
+                        href="{{url_for('main.about')}}">О
                         проекте</a>
                     {% if current_user.is_authenticated %}
                     {% if current_user.manager == 1 %}
