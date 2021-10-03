@@ -78,8 +78,10 @@
         let default_fields = (form.name.value != "" && form.email.value != "" &&
             form.phone.value != "" && form.from.value != "" && form.to.value != ""
         )
-        let auto_or_amount = form.auto.value!="" && form.amount.value!="";
-        form.SendButton.disabled = !default_fields && auto;
+        let amount = form.amount.value!="";
+        console.log("default",default_fields)
+        console.log("auto",amount)
+        form.SendButton.disabled = !(default_fields && amount);
 
     }
     ChangeButtonStatus()
