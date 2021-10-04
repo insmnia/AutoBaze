@@ -13,7 +13,8 @@
                 </div>
                 <div class="form-group help">
                     <input type="text" class="form-control" placeholder="Номер телефона" name="phone"
-                        onchange="ChangeButtonStatus()" onkeyup="ChangeButtonStatus()">
+                        onchange="ChangeButtonStatus()" onkeyup="ChangeButtonStatus()"
+                        onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
                 </div>
                 <div class="form-group help">
                     <input type="text" class="form-control" placeholder="E-mail адрес" name="email"
