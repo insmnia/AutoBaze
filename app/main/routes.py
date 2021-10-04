@@ -18,7 +18,7 @@ def index():
         arrival_point = request.form.get("to")
         amount = request.form.get("amount")
         auto = request.form.get("auto")
-        if request.form.get("ta")=="2":
+        if request.form.get("ta") == "2":
             amount = 20
         if not all([Fcs, phone, email, departure_point, arrival_point, amount, auto]):
             flash("Заполните форму полностью!")
@@ -32,7 +32,7 @@ def index():
             day = Day(
                 date=date, orders_amount=current_app.config['ORDERS_AMOUNT'])
             db.session.add(day)
-            
+
         if request.form.get("ta") == "1":
             if day.orders_amount - int(amount) < 0:
                 flash("На этот день нет столько мест!")
@@ -72,6 +72,7 @@ def index():
                            max_day=max_day,
                            )
 
+
 @main.route("/about")
 def about():
-    return render_template("main/about.html")
+    return render_template("main/about.html", title="О нас")
