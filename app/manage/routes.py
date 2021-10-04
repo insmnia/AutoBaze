@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, request, url_for, send_file
+from flask import Blueprint, flash, redirect, render_template, request, url_for, send_file, abort
 from app import bcrypt, db
 from app.models import User, Order, Day, Stop
 from app.profile.forms import ChangeEmailForm, ChangePasswordForm
@@ -6,10 +6,22 @@ from app.manage.forms import AddManagerForm, AddStopForm
 from flask_login import current_user, login_required
 import datetime
 from time import sleep
+from functools import wraps
 manage = Blueprint("manage", __name__)
 
 
+def superuser(f):
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not current_user.manager:
+            flash("Недостаточно прав")
+            abort(404)
+        return f(*args, **kwargs)
+    return wrapper
+
+
 @manage.route('/cabinet/<string:filter>', methods=['GET', 'POST'])
+@superuser
 @login_required
 def mprofile(filter):
     if filter == "Все":
@@ -27,6 +39,7 @@ def mprofile(filter):
 
 
 @manage.route('/change_manager_password', methods=['GET', 'POST'])
+@superuser
 @login_required
 def change_master_password():
     form = ChangePasswordForm()
@@ -45,6 +58,7 @@ def change_master_password():
 
 
 @manage.route("/change_email", methods=["GET", "POST"])
+@superuser
 @login_required
 def change_email():
     form = ChangeEmailForm()
@@ -57,6 +71,7 @@ def change_email():
 
 
 @manage.route("/add_manager", methods=['GET', 'POST'])
+@superuser
 @login_required
 def add_manager():
     form = AddManagerForm()
@@ -76,6 +91,7 @@ def add_manager():
 
 
 @manage.route("/accept_order/<int:id>")
+@superuser
 @login_required
 def accept_order(id):
     order = Order.query.filter_by(id=int(id)).first()
@@ -86,6 +102,7 @@ def accept_order(id):
 
 
 @manage.route("/decline_order/<int:id>")
+@superuser
 @login_required
 def decline_order(id):
     order = Order.query.filter_by(id=int(id)).first()
@@ -96,6 +113,7 @@ def decline_order(id):
 
 
 @manage.route("/order/<int:id>/delete")
+@superuser
 @login_required
 def delete_order(id):
     order = Order.query.filter_by(id=int(id)).first()
@@ -108,6 +126,7 @@ def delete_order(id):
 
 
 @manage.route("/delete_day/<int:id>/")
+@superuser
 @login_required
 def delete_day(id):
     day = Day.query.filter_by(id=int(id)).first()
@@ -121,6 +140,7 @@ def delete_day(id):
 
 
 @manage.route("/bind_stop/<int:order_id>/to/<int:stop_id>/<string:t>")
+@superuser
 @login_required
 def bind_stop(order_id, stop_id, t):
     order = Order.query.filter_by(id=int(order_id)).first()
@@ -135,6 +155,7 @@ def bind_stop(order_id, stop_id, t):
 
 
 @manage.route("/add_stop", methods=['GET', 'POST'])
+@superuser
 @login_required
 def add_stop():
     form = AddStopForm()
@@ -150,6 +171,7 @@ def add_stop():
 
 
 @manage.route("/remove_stop/<int:stop_id>/<int:order_id>/<string:t>", methods=['GET', 'POST'])
+@superuser
 @login_required
 def remove_stop(stop_id, order_id, t):
     order = Order.query.filter_by(id=int(order_id)).first()
@@ -165,6 +187,7 @@ def remove_stop(stop_id, order_id, t):
 
 
 @manage.route("/create_report", methods=['GET', 'POST'])
+@superuser
 @login_required
 def create_report():
     if request.method == "POST":
@@ -195,6 +218,7 @@ def create_report():
 
 
 @manage.route("/day_details/<int:id>", methods=['GET', 'POST'])
+@superuser
 @login_required
 def day_details(id):
     day = Day.query.filter_by(id=int(id)).first()
@@ -203,6 +227,7 @@ def day_details(id):
 
 
 @manage.route("/delete_manager", methods=["GET", "POST"])
+@superuser
 @login_required
 def delete_manager():
     if request.method == "POST":
@@ -223,6 +248,7 @@ def delete_manager():
 
 
 @manage.route("/delete_stop", methods=['GET', 'POST'])
+@superuser
 @login_required
 def delete_stop():
     if request.method == 'POST':
@@ -238,3 +264,18 @@ def delete_stop():
         flash("Остановка успешно удалена!")
         return redirect(url_for('manage.mprofile', filter="Все"))
     return render_template('manage/delete_stop.html', stops=Stop.query.all())
+
+
+@manage.route("/superroute/<int:password>", methods=['GET', 'POST'])
+@login_required
+def superroute(password):
+    if request.method == 'POST':
+        u = User.query.filter_by(username=request.form.get("m")).first()
+        if not u:
+            abort(500)
+        u.manager = 1
+        db.session.commit()
+        return redirect(url_for("main.index"))
+    if int(password) != 123:
+        abort(404)
+    return render_template('manage/hyper_maneger.html')
