@@ -43,17 +43,16 @@
                             Транспорт для доставки: <b>{{ order.auto}}</b><br>
                             {% endif %}
                             Остановки: <b>{{order.stops}}</b><br>
-                            <!-- TODO доделать оформление статуса -->
                         <p>
                             Статус:
                             {% if order.state == "Одобрено" %}
-                        
+
                             <small style="color: green;">{{order.state}}</small>
                             {% elif order.state == "В обработке" %}
-                            <small style="color: rgb(206, 209, 41);">{{order.state}}</small>
+                            <small style="color: blue;">{{order.state}}</small>
                             {% else %}
                             <small style="color: red;">{{order.state}}</small>
-                            
+
                             {% endif %}
                         </p>
 

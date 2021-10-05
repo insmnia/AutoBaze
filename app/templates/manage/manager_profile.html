@@ -42,7 +42,18 @@
                             Транспорт для доставки: <b>{{ order.auto}}</b><br>
                             {% endif %}
                             Остановки:<b>{{order.stops}}</b><br>
-                            Статус: <b>{{order.state}}</b>
+                        <p>
+                            Статус:
+                            {% if order.state == "Одобрено" %}
+
+                            <small style="color: green;">{{order.state}}</small>
+                            {% elif order.state == "В обработке" %}
+                            <small style="color: blue;">{{order.state}}</small>
+                            {% else %}
+                            <small style="color: red;">{{order.state}}</small>
+
+                            {% endif %}
+                        </p>
                         </p>
                         <div class="dropdown">
                             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
@@ -52,28 +63,22 @@
 
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <li>
-                                    <button type="button" class="btn btn-outline-success" id="liveToastBtn">
-                                        <a class="" href="{{ url_for('manage.accept_order',id=order.id) }}"
-                                            style="text-decoration:0;width: 100%;display: block;">
-                                            Принять
-                                        </a>
-                                    </button>
+                                    <a class="" href="{{ url_for('manage.accept_order',id=order.id) }}"
+                                        style="text-decoration:0;width: 100%;display: block;">
+                                        Принять
+                                    </a>
                                 </li>
                                 <li>
-                                    <button type="button" class="btn btn-outline-warning" id="liveToastBtn">
-                                        <a class="" href="{{ url_for('manage.decline_order',id=order.id) }}"
-                                            style="text-decoration:0;width: 100%;display: block;">
-                                            Отклонить
-                                        </a>
-                                    </button>
+                                    <a class="" href="{{ url_for('manage.decline_order',id=order.id) }}"
+                                        style="text-decoration:0;width: 100%;display: block;">
+                                        Отклонить
+                                    </a>
                                 </li>
                                 <li>
-                                    <button type="button" class="btn btn-outline-danger" id="liveToastBtn">
-                                        <a class="" href="{{ url_for('manage.delete_order',id=order.id) }}"
-                                            style="text-decoration:0;width: 100%;display: block;">
-                                            Удалить
-                                        </a>
-                                    </button>
+                                    <a class="" href="{{ url_for('manage.delete_order',id=order.id) }}"
+                                        style="text-decoration:0;width: 100%;display: block;">
+                                        Удалить
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -95,7 +100,7 @@
                         </p>
                         <p>
                             {% if order.stops %}
-                        <div class="dropdown">
+                        <div class="dropdown dropend">
                             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                 data-bs-toggle="dropdown" aria-expanded="false" style="display: block">
                                 Удалить остановку

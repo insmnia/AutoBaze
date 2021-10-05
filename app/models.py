@@ -67,16 +67,16 @@ class Stop(db.Model):
 class Order(db.Model):
     __tablename__ = "order"
     id = db.Column(db.Integer, primary_key=True)
-    FCs = db.Column(db.String(40), nullable=False)
-    phone = db.Column(db.String(20), nullable=False)
-    email = db.Column(db.String(30), nullable=False)
-    departure_point = db.Column(db.String(40), nullable=False)
-    arrival_point = db.Column(db.String(40), nullable=False)
-    order_type = db.Column(db.String(20), nullable=False)
+    FCs = db.Column(db.String(100), nullable=False)
+    phone = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), nullable=False)
+    departure_point = db.Column(db.String(100), nullable=False)
+    arrival_point = db.Column(db.String(100), nullable=False)
+    order_type = db.Column(db.String(100), nullable=False)
     date = db.Column(db.Date, nullable=False, default=datetime.utcnow().date())
     amount = db.Column(db.Integer)
-    auto = db.Column(db.String(25))
-    state = db.Column(db.String(15), nullable=False)
+    auto = db.Column(db.String(100))
+    state = db.Column(db.String(100), nullable=False)
     creator = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     stops = db.relationship(
         "Stop", secondary=stops_table

@@ -40,7 +40,18 @@
                             {% endif %}
                             Остановки: <b>{{order.stops}}</b><br>
                         </p>
-                        <p class="card-text"><small class="text-muted">Статус: {{order.state}}</small></p>
+                        <p>
+                            Статус:
+                            {% if order.state == "Одобрено" %}
+
+                            <small style="color: green;">{{order.state}}</small>
+                            {% elif order.state == "В обработке" %}
+                            <small style="color: blue;">{{order.state}}</small>
+                            {% else %}
+                            <small style="color: red;">{{order.state}}</small>
+
+                            {% endif %}
+                        </p>
                         <p>
                         <div class="dropdown">
                             <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
