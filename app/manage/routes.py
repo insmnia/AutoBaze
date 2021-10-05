@@ -14,7 +14,6 @@ def superuser(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         if not current_user.manager:
-            flash("Недостаточно прав")
             abort(404)
         return f(*args, **kwargs)
     return wrapper
