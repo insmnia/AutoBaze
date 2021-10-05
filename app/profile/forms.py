@@ -2,20 +2,21 @@ from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, PasswordField
 from wtforms.validators import ValidationError, DataRequired, Email
 from app.models import User
-
+import re
 
 class ChangePasswordForm(FlaskForm):
     current_password = PasswordField(
-        "Старый пароль", validators=[DataRequired()])
-    new_password = PasswordField("Новый пароль", validators=[DataRequired()])
+        "Старый пароль", validators=[DataRequired(message="Это поле обязательно для заполнения")])
+    new_password = PasswordField("Новый пароль", validators=[DataRequired(message="Это поле обязательно для заполнения")])
     submit = SubmitField("Сменить")
 
 
 class ChangeEmailForm(FlaskForm):
     master_password = PasswordField(
-        "Мастер-пароль", validators=[DataRequired()])
+        "Мастер-пароль", validators=[DataRequired(message="Это поле обязательно для заполнения")])
     new_email = StringField("Новая почта", validators=[
-                            DataRequired(), Email()])
+                            DataRequired(message="Это поле обязательно для заполнения"), Email(
+        granular_message=True, check_deliverability=True, message="Проверьте введенные данные")])
     submit = SubmitField("Сменить")
 
     def validate_email(self, email):
@@ -23,3 +24,6 @@ class ChangeEmailForm(FlaskForm):
         if user:
             raise ValidationError(
                 "Пользователь с такой почтой уже существует!")
+        if not re.match(r"([\w\._]+@[a-z]+\.[com|ru|by]+)", email.data):
+            raise ValidationError(
+                "Неккоретный формат почты. Допустимые домены - com,ru,by")

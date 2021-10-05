@@ -6,7 +6,7 @@ from app.models import Stop, User
 
 class AddManagerForm(FlaskForm):
     username = StringField(label="Имя пользователя",
-                           validators=[DataRequired()])
+                           validators=[DataRequired(message="Это поле обязательно для заполнения")])
     submit = SubmitField("Добавить")
 
     def validate_manager(self, username):
@@ -16,7 +16,7 @@ class AddManagerForm(FlaskForm):
 
 class AddStopForm(FlaskForm):
     name = StringField(label="Название остановки",
-                       validators=[DataRequired()])
+                       validators=[DataRequired(message="Это поле обязательно для заполнения")])
     submit = SubmitField("Добавить")
 
     def validate_stop(self, name):
