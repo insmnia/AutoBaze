@@ -12,6 +12,7 @@ def load_user(id):
 
 
 class User(db.Model, UserMixin):
+    __tablename__ = "user"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -67,15 +68,15 @@ class Order(db.Model):
     __tablename__ = "order"
     id = db.Column(db.Integer, primary_key=True)
     FCs = db.Column(db.String(40), nullable=False)
-    phone = db.Column(db.String(10), nullable=False)
+    phone = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(30), nullable=False)
     departure_point = db.Column(db.String(40), nullable=False)
     arrival_point = db.Column(db.String(40), nullable=False)
-    order_type = db.Column(db.String(15), nullable=False)
+    order_type = db.Column(db.String(20), nullable=False)
     date = db.Column(db.Date, nullable=False, default=datetime.utcnow().date())
     amount = db.Column(db.Integer)
     auto = db.Column(db.String(25))
-    state = db.Column(db.String(10), nullable=False)
+    state = db.Column(db.String(15), nullable=False)
     creator = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     stops = db.relationship(
         "Stop", secondary=stops_table
