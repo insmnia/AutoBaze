@@ -195,10 +195,11 @@ def create_report():
             flash("Заполните форму!")
             return redirect(url_for("manage.create_report"))
         orders = Order.query.filter(
-            Order.date.between(request.form.get("date_from"), request.form.get("date_to"))).all()
+            Order.date.between(request.form.get("date_from"), request.form.get("date_to"))).filter_by(state="Одобрено").all()
+        print(orders)
         passenger_value = 0
         good_value = 0
-        with open(f"report{request.form.get('date_from')}-{request.form.get('date_to')}.csv", 'w') as f:
+        with open(f"app/report{request.form.get('date_from')}-{request.form.get('date_to')}.csv", 'w') as f:
             writer = csv.writer(f)
             for order in orders:
                 if order.order_type == "Пассажирская":
