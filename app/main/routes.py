@@ -72,7 +72,10 @@ def index():
                            max_day=max_day,
                            )
 
-
 @main.route("/about")
 def about():
     return render_template("main/about.html", title="О нас")
+
+@main.route("/help")
+def help():
+    return render_template("main/help.html", title="Справка")
