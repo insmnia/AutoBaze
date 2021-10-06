@@ -11,7 +11,7 @@
                     <input type="text" required class="form-control" placeholder="ФИО" name="FCS">
                 </div>
                 <div class="form-group help">
-                    <input type="text" required class="form-control" placeholder="Номер телефона" name="phone"
+                    <input type="text" required class="form-control" placeholder="Номер телефона" name="phone" id="phone"
                         onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
                 </div>
                 <div class="form-group help">
@@ -58,6 +58,9 @@
     </div>
 </div>
 <script>
+    jQuery(function ($) {
+        $("#phone").mask("+375(99) 999-99-99");
+    });
     let trnsp = document.getElementById('ta');
     trnsp.addEventListener('change', function () {
         if (trnsp.value === "1") {
