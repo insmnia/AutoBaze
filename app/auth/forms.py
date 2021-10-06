@@ -9,7 +9,7 @@ class RegistrationForm(FlaskForm):
     username = StringField("Имя пользователя", validators=[
                            DataRequired(message="Это поле обязательно для заполнения"), Length(min=2, max=20, message="Имя должно быть от 2-х до 20-ти символов")])
     email = StringField("Почта", validators=[DataRequired(message="Это поле обязательно для заполнения"), Email(
-        granular_message=True, check_deliverability=True, message="Проверьте введенные данные")])
+        granular_message=True, check_deliverability=True, message="Проверьте формат почты")])
     password = PasswordField("Пароль", validators=[
                              DataRequired(message="Это поле обязательно для заполнения"), Length(min=8, max=20, message="Длина пароля должна быть от 8-ми до 20-ти символов")])
     confirm_password = PasswordField("Подтвердите пароль", validators=[
