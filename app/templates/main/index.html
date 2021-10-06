@@ -8,35 +8,30 @@
         <div class="col-md-offset-3 col-md-6">
             <form class="form-horizontal" method="POST" action="" name="FormOrder">
                 <div class="form-group" style="padding-top:30px">
-                    <input type="text" class="form-control" placeholder="ФИО" name="FCS" onchange="ChangeButtonStatus()"
-                        onkeyup="ChangeButtonStatus()">
+                    <input type="text" required class="form-control" placeholder="ФИО" name="FCS">
                 </div>
                 <div class="form-group help">
-                    <input type="text" class="form-control" placeholder="Номер телефона" name="phone"
-                        onchange="ChangeButtonStatus()" onkeyup="ChangeButtonStatus()"
+                    <input type="text" required class="form-control" placeholder="Номер телефона" name="phone"
                         onkeypress="return (event.charCode == 8 || event.charCode == 0 || event.charCode == 13) ? null : event.charCode >= 48 && event.charCode <= 57">
                 </div>
                 <div class="form-group help">
-                    <input type="text" class="form-control" placeholder="E-mail адрес" name="email"
-                        onchange="ChangeButtonStatus()" onkeyup="ChangeButtonStatus()">
+                    <input type="text" required class="form-control" placeholder="E-mail адрес" name="email">
                 </div>
                 <div class="form-group help">
-                    <select name="ta" id="ta" class="selectpicker form-control" onchange="ChangeButtonStatus()"
-                        onkeyup="ChangeButtonStatus()">
+                    <select name="ta" required id="ta" class="selectpicker form-control">
                         <option value="1" class="option-selected">Пасcажирская (20р)</option>
                         <option value="2" class="option-selected">Грузоперевозка (40р)</option>
                     </select>
                 </div>
                 <div class="row">
                     <div class="col-sm form-group help">
-                        <input type="text" class="form-control" name="amount" id="amount"
-                            placeholder="Кол-во пассажиров" onchange="ChangeButtonStatus()"
-                            onkeyup="ChangeButtonStatus()" onkeypress="return (event.charCode==8 || event.charCode==0 ||
+                        <input type="text" required class="form-control" name="amount" id="amount"
+                            placeholder="Кол-во пассажиров" onkeypress="return (event.charCode==8 || event.charCode==0 ||
                             event.charCode==13) ? null : event.charCode>= 48 && event.charCode <= 57">
                     </div>
                     <div class="col-sm form-group help">
-                        <select class="selectpicker form-control" name="auto" id="auto" style="visibility: hidden;"
-                            onchange="ChangeButtonStatus()" onkeyup="ChangeButtonStatus()">
+                        <select class="selectpicker form-control" required name="auto" id="auto"
+                            style="visibility: hidden;">
                             <option value="Микроавтобус" class="option-selected">Микроавтобус</option>
                             <option value="Грузовик" class="option-selected">Грузовик</option>
                             <option value="Фура" class="option-selected">Фура</option>
@@ -44,20 +39,19 @@
                     </div>
                 </div>
                 <div class="form-group help">
-                    <input type="date" name="calendar" value="{{ today }}" min="{{ today }}" max="{{ max_day }}"
-                        class="form-control" placeholder="Пароль" onchange="ChangeButtonStatus()"
-                        onkeyup="ChangeButtonStatus()">
+                    <input type="date" name="calendar" required value="{{ today }}" min="{{ today }}"
+                        max="{{ max_day }}" class="form-control" placeholder="Пароль">
                 </div>
                 <div class="form-group help">
-                    <input type="text" class="form-control" placeholder="Откуда" name="from"
-                        onchange="ChangeButtonStatus()" onkeyup="ChangeButtonStatus()">
+                    <input type="text" class="form-control" required placeholder="Откуда" name="from">
                 </div>
                 <div class="form-group help">
-                    <input type="text" class="form-control" placeholder="Куда" name="to" onchange="ChangeButtonStatus()"
-                        onkeyup="ChangeButtonStatus()">
+                    <input type="text" class="form-control" required placeholder="Куда" name="to">
                 </div>
+
                 <div class="form-group help">
                     <button type="submit" class="btn btn-default" name="SendButton">Заказать</button>
+                    </button>
                 </div>
             </form>
         </div>
@@ -68,26 +62,16 @@
     trnsp.addEventListener('change', function () {
         if (trnsp.value === "1") {
             document.getElementsByName("amount")[0].style.visibility = "visible";
+            document.getElementsByName("amount")[0].required = true;
             document.getElementById("auto").style.visibility = 'hidden';
+            document.getElementById("auto").required = false;
         }
         else if (trnsp.value === "2") {
             document.getElementsByName("amount")[0].style.visibility = "hidden";
+            document.getElementsByName("amount")[0].required = false;
             document.getElementById("auto").style.visibility = 'visible';
+            document.getElementById("auto").required = true;
         }
     });
-    form = document.FormOrder;
-    function ChangeButtonStatus() {
-        let default_fields = (form.name.value != "" && form.email.value != "" &&
-            form.phone.value != "" && form.from.value != "" && form.to.value != ""
-        )
-        let amount = form.amount.value != "";
-        // console.log("default", default_fields)
-        // console.log("auto", amount)
-        console.log("visible", document.getElementById("auto").style.visibility == 'visible')
-        form.SendButton.disabled = !(default_fields && (amount || document.getElementById("auto").style.visibility == 'visible'));
-
-    }
-    ChangeButtonStatus()
-    //
 </script>
 {% endblock %}

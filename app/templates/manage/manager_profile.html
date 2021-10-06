@@ -4,6 +4,17 @@
     #btn {
         display: block;
         width: 100%;
+
+    }
+
+    #l {
+        width: 100%;
+        display: block;
+    }
+
+    #l:hover {
+        background-color: lightgrey;
+
     }
 </style>
 <div class="container">
@@ -63,20 +74,17 @@
 
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 <li>
-                                    <a class="" href="{{ url_for('manage.accept_order',id=order.id) }}"
-                                        style="width: 100%;display: block;">
+                                    <a class="" id="l" href="{{ url_for('manage.accept_order',id=order.id) }}">
                                         Принять
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="" href="{{ url_for('manage.decline_order',id=order.id) }}"
-                                        style="width: 100%;display: block;">
+                                    <a class="" href="{{ url_for('manage.decline_order',id=order.id) }}" id="l">
                                         Отклонить
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="" href="{{ url_for('manage.delete_order',id=order.id) }}"
-                                        style="width: 100%;display: block;">
+                                    <a class="" href="{{ url_for('manage.delete_order',id=order.id) }}" id="l">
                                         Удалить
                                     </a>
                                 </li>
@@ -91,7 +99,8 @@
 
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 {% for stop in stops %}
-                                <li><a href="{{ url_for('manage.bind_stop',stop_id=stop.id,order_id=order.id,t='p') }}">{{
+                                <li><a id="l"
+                                        href="{{ url_for('manage.bind_stop',stop_id=stop.id,order_id=order.id,t='p') }}">{{
                                         stop.name }}</a>
                                 </li>
                                 {% endfor %}
@@ -107,7 +116,7 @@
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                                 {% for stop in order.stops %}
-                                <li><a
+                                <li><a id="l"
                                         href="{{ url_for('manage.remove_stop',stop_id=stop.id,order_id=order.id,t='p') }}">{{
                                         stop.name }}</a>
                                 </li>
@@ -173,7 +182,8 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
                     {% for day in days %}
-                    <a class="dropdown-item" href="{{url_for('manage.day_details',id=day.id)}}">{{day.date|date}}</a>
+                    <a class="dropdown-item" id="l"
+                        href="{{url_for('manage.day_details',id=day.id)}}">{{day.date|date}}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -186,11 +196,13 @@
                     Фильтр по статусу
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='В обработке') }}">В
+                    <a class="dropdown-item" id="l" href="{{ url_for('manage.mprofile',filter='В обработке') }}">В
                         обработке</a>
-                    <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='Одобрено') }}">Одобрено</a>
-                    <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='Отклонено') }}">Отклонено</a>
-                    <a class="dropdown-item" href="{{ url_for('manage.mprofile',filter='Все') }}">Сбросить<a></a>
+                    <a class="dropdown-item" id="l"
+                        href="{{ url_for('manage.mprofile',filter='Одобрено') }}">Одобрено</a>
+                    <a class="dropdown-item" id="l"
+                        href="{{ url_for('manage.mprofile',filter='Отклонено') }}">Отклонено</a>
+                    <a class="dropdown-item" id="l" href="{{ url_for('manage.mprofile',filter='Все') }}">Сбросить<a></a>
                 </div>
             </div>
         </div>
