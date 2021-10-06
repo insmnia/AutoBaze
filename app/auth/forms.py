@@ -27,9 +27,9 @@ class RegistrationForm(FlaskForm):
         if user:
             raise ValidationError(
                 "Пользователь с такой почтой уже существует!")
-        if not re.match(r"([\w\._]+@[a-z]+\.[com|ru|by]+)", email.data):
-            raise ValidationError(
-                "Неккоретный формат почты. Допустимые домены - com,ru,by")
+    #     if not re.match(r"([\w\._]+@[a-z]+\.[com|ru|by]+)", email.data):
+    #         raise ValidationError(
+    #             "Неккоретный формат почты. Допустимые домены - com,ru,by")
 
 
 class LoginForm(FlaskForm):
