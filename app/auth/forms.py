@@ -48,5 +48,5 @@ class SendResetPasswordForm(FlaskForm):
 
 class ResetPasswordForm(FlaskForm):
     new_password = PasswordField("Новый пароль", validators=[
-                                 DataRequired(message="Это поле обязательно для заполнения")])
+                                 DataRequired(message="Это поле обязательно для заполнения"),Length(min=8, max=20, message="Длина пароля должна быть от 8-ми до 20-ти символов")])
     submit = SubmitField("Обновить пароль")

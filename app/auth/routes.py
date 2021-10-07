@@ -54,7 +54,7 @@ def send_reset_password_email():
         user = User.query.filter_by(email=form.email.data).first()
         if user is not None:
             reset_email(user)
-            flash("Следуйте инструкциям на почте для восстановления пароля")
+            flash("Следуйте инструкциям на почте для восстановления пароля. Также проверьте папку Спам")
             return redirect(url_for("auth.sign_in"))
         else:
             flash("Пользователь с такой почтой не найден!")

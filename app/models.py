@@ -3,6 +3,7 @@ from app import db, login_manager
 from flask_login import UserMixin
 from flask import current_app as app
 from time import time
+from app import bcrypt
 import jwt
 
 
@@ -12,7 +13,7 @@ def load_user(id):
 
 
 class User(db.Model, UserMixin):
-    __tablename__ = "user"
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -27,7 +28,8 @@ class User(db.Model, UserMixin):
         self.email = new_email
 
     def set_password(self, password):
-        self.password = password
+        pwhash = bcrypt.hashpw(password.encode('utf8'), bcrypt.gensalt())
+        self.password = pwhash
 
     def get_reset_password_token(self, expires=600):
         return jwt.encode(
@@ -77,7 +79,7 @@ class Order(db.Model):
     amount = db.Column(db.Integer)
     auto = db.Column(db.String(100))
     state = db.Column(db.String(100), nullable=False)
-    creator = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    creator = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     stops = db.relationship(
         "Stop", secondary=stops_table
     )
