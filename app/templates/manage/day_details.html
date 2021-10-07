@@ -1,16 +1,17 @@
 {% extends "base.html"%}
 
 {% block content%}
-<h3>День - {{day.date|date}}</h3>
-<h4>Количество заявок: {{20- day.orders_amount }}</h4>
-<button type="button" class="btn btn-outline-danger">
+<h3 style="color:white">День - {{day.date|date}}</h3>
+<h4 style="color:white">Количество заявок: {{20- day.orders_amount }}</h4>
+<button style="color:white" type="button" class="btn btn-outline-danger">
     <a href="{{ url_for('manage.delete_day',id=day.id) }}" style="text-decoration: none;">Удалить</a>
-</button>
+</button style="color:white">
 
 <style>
     #btn {
         width: 100%;
     }
+    
 </style>
 <div class="container">
     <div class="row">
