@@ -13,7 +13,7 @@ class ChangePasswordForm(FlaskForm):
 
 class ChangeEmailForm(FlaskForm):
     master_password = PasswordField(
-        "Мастер-пароль", validators=[DataRequired(message="Это поле обязательно для заполнения")])
+        "Пароль", validators=[DataRequired(message="Это поле обязательно для заполнения")])
     new_email = StringField("Новая почта", validators=[
                             DataRequired(message="Это поле обязательно для заполнения"), Email(
         granular_message=True, check_deliverability=True, message="Проверьте введенные данные")])
@@ -24,6 +24,6 @@ class ChangeEmailForm(FlaskForm):
         if user:
             raise ValidationError(
                 "Пользователь с такой почтой уже существует!")
-        if not re.match(r"([\w\._]+@[a-z]+\.[com|ru|by]+)", email.data):
-            raise ValidationError(
-                "Неккоретный формат почты. Допустимые домены - com,ru,by")
+        # if not re.match(r"([\w\._]+@[a-z]+\.[com|ru|by]+)", email.data):
+        #     raise ValidationError(
+        #         "Неккоретный формат почты. Допустимые домены - com,ru,by")

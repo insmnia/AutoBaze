@@ -36,6 +36,9 @@ def change_master_password():
 def change_email():
     form = ChangeEmailForm()
     if form.validate_on_submit():
+        if bcrypt.check_password_hash(current_user.password, form.master_password.data):
+            flash("Неправильный пароль")
+            return redirect(url_for("profile.change_email"))
         current_user.change_email(form.new_email.data)
         db.session.commit()
         flash("Почта успешно сменена!")
