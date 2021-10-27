@@ -67,7 +67,7 @@ def change_email():
         db.session.commit()
         flash("Почта успешно сменена!")
         return redirect(url_for('manage.mprofile', filter="Все"))
-    return render_template('profile/change_email.html', form=form, title="Смена почты")
+    return render_template('profile/changeemail.html', form=form, title="Смена почты")
 
 
 @manage.route("/add_manager", methods=['GET', 'POST'])

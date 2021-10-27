@@ -31,19 +31,19 @@ def change_master_password():
     return render_template('profile/change_master_password.html', form=form, title="Смена пароля")
 
 
-@prof.route("/change_email", methods=["GET", "POST"])
+@prof.route("/changeemail", methods=["GET", "POST"])
 @login_required
-def change_email():
+def changeemail():
     form = ChangeEmailForm()
     if form.validate_on_submit():
         if bcrypt.check_password_hash(current_user.password, form.master_password.data):
             flash("Неправильный пароль")
-            return redirect(url_for("profile.change_email"))
+            return redirect(url_for("profile.changeemail"))
         current_user.change_email(form.new_email.data)
         db.session.commit()
         flash("Почта успешно сменена!")
         return redirect(url_for('profile.profile'))
-    return render_template('profile/change_email.html', form=form, title="Смена почты")
+    return render_template('profile/changeemail.html', form=form, title="Смена почты")
 
 
 @prof.route("/uorder/<int:id>/delete")
