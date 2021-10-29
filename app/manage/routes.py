@@ -196,10 +196,9 @@ def create_report():
             return redirect(url_for("manage.create_report"))
         orders = Order.query.filter(
             Order.date.between(request.form.get("date_from"), request.form.get("date_to"))).filter_by(state="Одобрено").all()
-        print(orders)
         passenger_value = 0
         good_value = 0
-        with open(f"app/report{request.form.get('date_from')}-{request.form.get('date_to')}.csv", 'w') as f:
+        with open(f"app/reports/report{request.form.get('date_from')}-{request.form.get('date_to')}.csv", 'w') as f:
             writer = csv.writer(f)
             for order in orders:
                 if order.order_type == "Пассажирская":
@@ -209,8 +208,8 @@ def create_report():
                 writer.writerow(str(order).split(','))
             writer.writerow(["Пассажарские перевозки", passenger_value])
             writer.writerow(["Грузоперевозки", good_value])
-        sleep(1)
-        return send_file(f"report{request.form.get('date_from')}-{request.form.get('date_to')}.csv", as_attachment=True)
+        sleep(0.2)
+        return send_file(f"reports/report{request.form.get('date_from')}-{request.form.get('date_to')}.csv", as_attachment=True)
     return render_template("manage/create_report.html", title='Отчёт', today=str(datetime.datetime.now()).split()[0])
 
 
