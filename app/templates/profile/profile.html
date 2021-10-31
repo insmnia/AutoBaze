@@ -8,7 +8,7 @@
 </style>
 <div class="container">
     <div class="row">
-        <div class="col-sm-8" style="width:50%;margin-right:15%;margin-top:2%;">
+        <div class="col-lg-8" style="width:50%;margin-right:15%;margin-top:2%;">
             {% if user.orders %}
             <div class="row" style="background:black;color:white;display:flex;align-items:center;border-radius: 5px;">
                 {% for order in user.orders %}
@@ -68,12 +68,12 @@
                 {% endfor %}
             </div>
             {% else %}
-            <h5>Вы не оставляли заявок</h5>
-            <p>Перейдите на <a href="{{url_for('main.index')}}" style="text-decoration:none">главную</a>, чтобы оставить
+            <h4 style="color:white">Вы не оставляли заявок</h4>
+            <p style="color:white">Перейдите на <a href="{{url_for('main.index')}}" style="text-decoration:none">главную</a>, чтобы оставить
                 первую!</p>
             {% endif %}
         </div>
-        <div class="col-sm-4">
+        <div class="col-lg-4">
             <div class="card" style="width: 18rem;margin-top:6%">
                 <div class="card-body">
                     <h5 class="card-title">Пользователь - {{ user.username }}</h5>
