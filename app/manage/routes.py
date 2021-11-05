@@ -179,7 +179,7 @@ def remove_stop(stop_id, order_id, t):
     d = Day.query.filter_by(date=order.date).first()
 
     db.session.commit()
-    flash("Остановка успешно удалена")
+    flash("Остановка успешно откреплена")
     if t == "d":
         return redirect(url_for("manage.day_details", id=d.id))
     else:
@@ -208,6 +208,12 @@ def create_report():
                 writer.writerow(str(order).split(','))
             writer.writerow(["Пассажарские перевозки", passenger_value])
             writer.writerow(["Грузоперевозки", good_value])
+            writer.writerow(
+                ["Пассажарские перевозки НАЛОГОВАЯ", passenger_value*.2])
+            writer.writerow(["Грузоперевозки НАЛОГОВАЯ", good_value*.2])
+            writer.writerow(["Пассажарские перевозки ИТОГ",
+                            passenger_value-passenger_value*.2])
+            writer.writerow(["Грузоперевозки ИТОГ", good_value-good_value*.2])
         sleep(0.2)
         return send_file(f"reports/report{request.form.get('date_from')}-{request.form.get('date_to')}.csv", as_attachment=True)
     return render_template("manage/create_report.html", title='Отчёт', today=str(datetime.datetime.now()).split()[0])
