@@ -49,15 +49,15 @@ class RegistrationForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     username = StringField(
-        "Имя пользователя", validators=[DataRequired(message="Это поле обязательно для заполнения")])
+        "Имя пользователя", validators=[DataRequired(message="Это поле обязательно для заполнения"), Length(min=2, max=20, message="Имя может быть от 2 до 20 символов")])
     password = PasswordField("Пароль", validators=[DataRequired(
-        message="Это поле обязательно для заполнения")])
+        message="Это поле обязательно для заполнения"), Length(min=8, max=20, message="Беляй отлетел")])
     submit = SubmitField("Войти")
 
 
 class SendResetPasswordForm(FlaskForm):
     email = StringField("Почта", validators=[DataRequired(message="Это поле обязательно для заполнения"), Email(
-        granular_message=True, check_deliverability=True, message="Проверьте введенные данные")])
+        granular_message=True, check_deliverability=True, message="Проверьте введенные данные"), Length(max=255, message="Беляй отлетел")])
     submit = SubmitField("Отправить письмо")
 
 

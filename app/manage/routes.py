@@ -32,7 +32,7 @@ def mprofile(filter):
         'manage/manager_profile.html',
         user=current_user,
         orders=orders,
-        days=Day.query.all(),
+        days=Day.query.order_by(Day.date.desc()).limit(10).all(),
         stops=Stop.query.all(),
         title="Кабинет"
     )
@@ -214,7 +214,7 @@ def create_report():
             writer.writerow(["Пассажарские перевозки ИТОГ",
                             passenger_value-passenger_value*.2])
             writer.writerow(["Грузоперевозки ИТОГ", good_value-good_value*.2])
-        sleep(0.2)
+        sleep(0.5)
         return send_file(f"reports/report{request.form.get('date_from')}-{request.form.get('date_to')}.csv", as_attachment=True)
     return render_template("manage/create_report.html", title='Отчёт', today=str(datetime.datetime.now()).split()[0])
 
