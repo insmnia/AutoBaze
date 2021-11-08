@@ -117,11 +117,14 @@ def decline_order(id):
 @login_required
 def delete_order(id):
     order = Order.query.filter_by(id=int(id)).first()
-    day = Day.query.filter_by(date=order.date).first()
-    day.orders_amount += order.amount
-    db.session.delete(order)
-    db.session.commit()
-    flash("Заявка успешно удалена!")
+    if not order:
+        flash("Заявка внезапно пропала. Похоже, что пользователь удалил ее...")
+    else:
+        day = Day.query.filter_by(date=order.date).first()
+        day.orders_amount += order.amount
+        db.session.delete(order)
+        db.session.commit()
+        flash("Заявка успешно удалена!")
     return redirect(url_for('manage.mprofile', filter="Все"))
 
 
@@ -130,12 +133,15 @@ def delete_order(id):
 @login_required
 def delete_day(id):
     day = Day.query.filter_by(id=int(id)).first()
-    orders = Order.query.filter_by(date=day.date).all()
-    for order in orders:
-        db.session.delete(order)
-    db.session.delete(day)
-    db.session.commit()
-    flash("День успешно удален!")
+    if not day:
+        flash("Упс... Похоже, день уже удален...")
+    else:
+        orders = Order.query.filter_by(date=day.date).all()
+        for order in orders:
+            db.session.delete(order)
+        db.session.delete(day)
+        db.session.commit()
+        flash("День успешно удален!")
     return redirect(url_for('manage.mprofile', filter="Все"))
 
 
@@ -254,9 +260,6 @@ def delete_manager():
 @login_required
 def delete_stop():
     if request.method == 'POST':
-        if not current_user.manager:
-            flash("Недостаточно прав")
-            return redirect(url_for('main.index'))
         s = Stop.query.filter_by(name=request.form.get("stop")).first()
         if not s:
             flash("Нет такой остановки!")

@@ -50,9 +50,12 @@ def changeemail():
 @login_required
 def delete_uorder(id):
     order = Order.query.filter_by(id=int(id)).first()
-    day = Day.query.filter_by(date=order.date).first()
-    day.orders_amount += order.amount
-    db.session.delete(order)
-    db.session.commit()
-    flash("Заявка успешно удалена!")
+    if not order:
+        flash("Ваша заявка внезапно пропала. Мы приложим все усилия, чтобы ее найти!")
+    else:
+        day = Day.query.filter_by(date=order.date).first()
+        day.orders_amount += order.amount
+        db.session.delete(order)
+        db.session.commit()
+        flash("Заявка успешно удалена!")
     return redirect(url_for('profile.profile'))
