@@ -1,159 +1,119 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-      crossorigin="anonymous"
-    ></script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      href="{{ url_for('static', filename='login.css') }}"
-    />
-    <script src="{{url_for('static',filename='jquery-3.6.0.min.js')}}"></script>
-    <script src="{{url_for('static',filename='jquery.maskedinput.js')}}"></script>
-    <title>AutoBaze - {{ title }}</title>
-  </head>
 
-  <body>
-    <style>
-      @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='login.css') }}" />
+  <script src="{{url_for('static',filename='jquery-3.6.0.min.js')}}"></script>
+  <script src="{{url_for('static',filename='jquery.maskedinput.js')}}"></script>
+  <title>AutoBaze - {{ title }}</title>
+</head>
 
-      body {
-        background-color: #262a2b;
-        font-family: 'Roboto Mono', monospace;
-        font-size: 14px;
-      }
-    </style>
-    <!-- Навигация -->
-    <header>
-      <nav class="navbar navbar-expand-sm navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('main.index') }}">
-          <div class="fs-2 mb-3">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="32"
-              height="24"
-              fill="currentColor"
-              class="bi bi-truck"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"
-              ></path>
-            </svg>
-            AutoBaze
-          </div>
-        </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarNavAltMarkup"
-          aria-controls="navbarNavAltMarkup"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav">
-            <a class="nav-link active" href="{{ url_for('main.index') }}">
-              Главная
-            </a>
-            <a class="nav-link active" href="{{ url_for('main.about') }}">
-              О нас
-            </a>
-            <a class="nav-link" target="_blank" href="{{url_for('main.help')}}">
-              Справка
-            </a>
-            {% if current_user.is_authenticated %} {% if current_user.manager ==
-            1 %}
-            <a
-              class="nav-link"
-              href="{{ url_for('manage.mprofile',filter='Все') }}"
-            >
-              Кабинет
-            </a>
-            {% else %}
-            <a class="nav-link" href="{{ url_for('profile.profile') }}">
-              Профиль
-            </a>
-            {% endif %}
-            <a class="nav-link" href="{{ url_for('auth.logout') }}">Выйти</a>
-            {% else %}
-            <a class="nav-link" href="{{ url_for('auth.sign_in') }}">Войти</a>
-            <a class="nav-link" href="{{ url_for('auth.sign_up') }}">
-              Регистрация
-            </a>
-            {% endif %}
-          </div>
+<body>
+  <style>
+    @import url('https://fonts.googleapis.com/css?family=Roboto+Mono');
+
+    body {
+      background-color: #262a2b;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 14px;
+    }
+  </style>
+  <!-- Навигация -->
+  <header>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
+      <a class="navbar-brand" href="{{ url_for('main.index') }}">
+        <div class="fs-2 mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="24" fill="currentColor" class="bi bi-truck"
+            viewBox="0 0 16 16">
+            <path
+              d="M0 3.5A1.5 1.5 0 0 1 1.5 2h9A1.5 1.5 0 0 1 12 3.5V5h1.02a1.5 1.5 0 0 1 1.17.563l1.481 1.85a1.5 1.5 0 0 1 .329.938V10.5a1.5 1.5 0 0 1-1.5 1.5H14a2 2 0 1 1-4 0H5a2 2 0 1 1-3.998-.085A1.5 1.5 0 0 1 0 10.5v-7zm1.294 7.456A1.999 1.999 0 0 1 4.732 11h5.536a2.01 2.01 0 0 1 .732-.732V3.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5v7a.5.5 0 0 0 .294.456zM12 10a2 2 0 0 1 1.732 1h.768a.5.5 0 0 0 .5-.5V8.35a.5.5 0 0 0-.11-.312l-1.48-1.85A.5.5 0 0 0 13.02 6H12v4zm-9 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z">
+            </path>
+          </svg>
+          AutoBaze
         </div>
-      </nav>
-    </header>
-    <main role="main" class="container">
-      <!-- <div class="col-md-8"> -->
-      {% with messages = get_flashed_messages() %} {% if messages %} {% for
-      message in messages %}
-      <div
-        class="container align-items-center alert-info bor"
-        style="border-radius: 5px;"
-      >
-        <p class=""></p>
-        {{ message }}
-        <p></p>
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link active" href="{{ url_for('main.index') }}">
+            Главная
+          </a>
+          <a class="nav-link active" href="{{ url_for('main.about') }}">
+            О нас
+          </a>
+          <a class="nav-link" target="_blank" href="{{url_for('main.help')}}">
+            Справка
+          </a>
+          {% if current_user.is_authenticated %} {% if current_user.manager ==
+          1 %}
+          <a class="nav-link" href="{{ url_for('manage.mprofile',filter='Все') }}">
+            Кабинет
+          </a>
+          {% else %}
+          <a class="nav-link" href="{{ url_for('profile.profile') }}">
+            Профиль
+          </a>
+          {% endif %}
+          <a class="nav-link" href="{{ url_for('auth.logout') }}">Выйти</a>
+          {% else %}
+          <a class="nav-link" href="{{ url_for('auth.sign_in') }}">Войти</a>
+          <a class="nav-link" href="{{ url_for('auth.sign_up') }}">
+            Регистрация
+          </a>
+          {% endif %}
+        </div>
       </div>
-      {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
-      <!-- </div> -->
-    </main>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script
-      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-      integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-      crossorigin="anonymous"
-    ></script>
-      [if IE]>
-  <script type="text/javascript">
-  window.location = "redirect";
+    </nav>
+  </header>
+  <main role="main" class="container">
+    <!-- <div class="col-md-8"> -->
+    {% with messages = get_flashed_messages() %} {% if messages %} {% for
+    message in messages %}
+    <div class="container align-items-center alert-info bor" style="border-radius: 5px;">
+      <p class=""></p>
+      {{ message }}
+      <p></p>
+    </div>
+    {% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
+    <!-- </div> -->
+  </main>
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+</body>
+<script> 
+  var $buoop = {required:{e:-4,f:-3,o:-3,s:-1,c:-3},insecure:true,api:2021.11 }; 
+  function $buo_f(){ 
+   var e = document.createElement("script"); 
+   e.src = "//browser-update.org/update.min.js"; 
+   document.body.appendChild(e);
+  };
+  try {document.addEventListener("DOMContentLoaded", $buo_f,false)}
+  catch(e){window.attachEvent("onload", $buo_f)}
   </script>
-  <![endif]
-  </body>
+
 </html>
