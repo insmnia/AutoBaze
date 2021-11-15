@@ -10,7 +10,7 @@ main = Blueprint('main', __name__)
 @main.route('/', methods=['GET', "POST"])
 @login_required
 def index():
-    allowed_symbols = 'йцукенгшщзфывапролдячсмитьбюжэъё ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁ'
+    allowed_symbols = 'ёйцукенгшщзхъфывапролджэячсмитьбю ЁЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮ'
     if request.method == "POST":
 
         Fcs = request.form.get("FCS")
