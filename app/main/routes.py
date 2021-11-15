@@ -3,19 +3,49 @@ from flask import render_template, request, Blueprint, flash, redirect, url_for,
 from flask_login import login_required, current_user
 from app import db
 from app.models import Order, Day
+import re
 main = Blueprint('main', __name__)
 
 
 @main.route('/', methods=['GET', "POST"])
 @login_required
 def index():
+    allowed_symbols = 'йцукенгшщзфывапролдячсмитьбюжэъё ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁ'
     if request.method == "POST":
 
         Fcs = request.form.get("FCS")
+        Fcs = re.sub('\s+', ' ', Fcs)
+        for ch in Fcs:
+            if ch not in allowed_symbols:
+                flash('Некорретное имя')
+                return redirect(url_for('main.index'))
+        if all([x == ' ' for x in Fcs]):
+            flash('Некорректное имя')
+            return redirect(url_for('main.index'))
+
         phone = request.form.get("phone")
         email = request.form.get("email")
+
         departure_point = request.form.get("from")
+        departure_point = re.sub('\s+', ' ', departure_point)
+        if not departure_point:
+            flash('Некорректное место отправки')
+            return redirect(url_for('main.index'))
+        for ch in departure_point:
+            if ch not in allowed_symbols + '0123456789':
+                flash('Некорректное место отправки')
+                return redirect(url_for('main.index'))
+
         arrival_point = request.form.get("to")
+        arrival_point = re.sub('\s+', ' ', arrival_point)
+        if not arrival_point:
+            flash('Некорректное место отправки')
+            return redirect(url_for('main.index'))
+        for ch in arrival_point:
+            if ch not in allowed_symbols+'0123456789':
+                flash('Некорректное место отправки')
+                return redirect(url_for('main.index'))
+
         amount = request.form.get("amount")
         auto = request.form.get("auto")
         if request.form.get("ta") == "2":
@@ -72,9 +102,11 @@ def index():
                            max_day=max_day,
                            )
 
+
 @main.route("/about")
 def about():
     return render_template("main/about.html", title="О нас")
+
 
 @main.route("/help")
 def help():

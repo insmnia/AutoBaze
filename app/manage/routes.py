@@ -169,6 +169,10 @@ def add_stop():
         if Stop.query.filter_by(name=form.name.data).first():
             flash("Такая остановка уже есть!")
             return redirect(url_for("manage.add_stop"))
+        for ch in form.name.data:
+            if ch not in 'йцукенгшщзфывапролдячсмитьбюжэъё ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁ0123456789':
+                flash("Некорретное название остановки (только цифры и буквы)")
+                return redirect(url_for('manage.add_stop'))
         s = Stop(name=form.name.data)
         db.session.add(s)
         db.session.commit()

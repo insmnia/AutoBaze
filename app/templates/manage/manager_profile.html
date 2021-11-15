@@ -108,13 +108,13 @@
                         </div>
                         </p>
                         <p>
-                            {% if order.stops %}
-                        <div class="dropdown dropend">
-                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                        {% if order.stops %}
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink2"
                                 data-bs-toggle="dropdown" aria-expanded="false" style="display: block">
                                 Удалить остановку
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink2">
                                 {% for stop in order.stops %}
                                 <li><a id="l"
                                         href="{{ url_for('manage.remove_stop',stop_id=stop.id,order_id=order.id,t='p') }}">{{
@@ -134,7 +134,7 @@
         <div class="col-lg-4">
             <div class="card" style="width: 75%;margin-top:6%">
                 <div class="card-body">
-                    <h5 class="card-title">Менеджер - {{ user.username }}</h5>
+                    <h5 class="card-title">{{ user.username }}</h5>
                     <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
                     <p class="card-text">
                         <button type="button" class="btn btn-primary" id="btn"><a
