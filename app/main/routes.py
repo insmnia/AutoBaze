@@ -58,7 +58,7 @@ def index():
         if not all([Fcs, phone, email, departure_point, arrival_point, amount, auto]):
             flash("Заполните форму полностью!")
             return redirect(url_for('main.index'))
-        if not (re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', request.form.get('calendar'))):
+        if not (re.match(r'^([0-9]{4}-[0-9]{2}-[0-9]{2})$', request.form.get('calendar'))):
             flash('Введите дату в указанном формате ГГ-ММ-ДД. Год указать полностью')
             return redirect(url_for('main.index'))
         print(request.form.get('calendar'))
