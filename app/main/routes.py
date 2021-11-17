@@ -6,9 +6,11 @@ from app.models import Order, Day
 import re
 main = Blueprint('main', __name__)
 
+
 @main.route('/redirect')
 def handle_ie():
     return render_template("fuckyou.html")
+
 
 @main.route('/', methods=['GET', "POST"])
 @login_required
@@ -56,14 +58,15 @@ def index():
         if not all([Fcs, phone, email, departure_point, arrival_point, amount, auto]):
             flash("Заполните форму полностью!")
             return redirect(url_for('main.index'))
-        if not (re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}',request.form.get('calendar'))):
-            flash('Введите дату в указанном формате ДД-ММ-ГГ')
+        if not (re.match(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', request.form.get('calendar'))):
+            flash('Введите дату в указанном формате ГГ-ММ-ДД. Год указать полностью')
             return redirect(url_for('main.index'))
-
+        print(request.form.get('calendar'))
         date = request.form.get("calendar").split('-')
         date = datetime.date(*map(int, date))
-        if date<datetime.date.today() or date>datetime.date.today()+datetime.timedelta(days=7):
-            flash(f'Выберите дату между {datetime.date.today()} и {datetime.date.today()+datetime.timedelta(days=7)}')
+        if date < datetime.date.today() or date > datetime.date.today()+datetime.timedelta(days=7):
+            flash(
+                f'Выберите дату между {datetime.date.today()} и {datetime.date.today()+datetime.timedelta(days=7)}')
             return redirect(url_for('main.index'))
         day = Day.query.filter_by(date=date).first()
 
